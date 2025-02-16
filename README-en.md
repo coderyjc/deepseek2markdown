@@ -59,6 +59,12 @@ After you have unzipped .crx, follow method 1
 
 ## TODOs
 
+- [ ] Support strict mode Markdown export
+- [ ] Support filtering out server busy messages
+- [ ] Support selecting specific messages in a conversation for export (custom selection of paragraphs, export only questions or answers)
+- [ ] Support batch export of conversations
+
+
 v0.1
 
 - [x] Beautify popup.html
