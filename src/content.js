@@ -60,7 +60,7 @@ function resolveTag_p(node) {
         } else if (childNode.classList && childNode.classList.contains('katex')) {
             const tex = childNode.querySelector('annotation[encoding="application/x-tex"]');
             if (tex) {
-                content += `$$$${tex.textContent.trim()}$$$`;
+                content += `$$${tex.textContent.trim()}$$`;
             }
         } else if (childNode.tagName === 'STRONG') {
             content += `**${childNode.textContent.trim()}**`;
@@ -249,41 +249,42 @@ function exportMarkdown() {
     return mdContent;
 }
 
-function exportPDF() {
-    const mdContent = getOrderedMessages();
-    if (!mdContent) return;
+// TODO 暂未开发
+// function exportPDF() {
+//     const mdContent = getOrderedMessages();
+//     if (!mdContent) return;
 
-    const fixedMdContent = mdContent.replace(/(\*\*.*?\*\*)/g, '<strong>$1</strong>')
-        .replace(/\(\s*([^)]*)\s*\)/g, '\\($1\\)')
-        .replace(/\$\$\s*([^$]*)\s*\$\$/g, '$$$1$$');
+//     const fixedMdContent = mdContent.replace(/(\*\*.*?\*\*)/g, '<strong>$1</strong>')
+//         .replace(/\(\s*([^)]*)\s*\)/g, '\\($1\\)')
+//         .replace(/\$\$\s*([^$]*)\s*\$\$/g, '$$1$$');
 
-    const printContent = `
-            <html>
-                <head>
-                    <title>DeepSeek Chat Export</title>
-                    <style>
-                        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
-                        h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
-                        .ai-answer { color: #1a7f37; margin: 15px 0; }
-                        .ai-chain { color: #666; font-style: italic; margin: 10px 0; }
-                        hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
-                    </style>
-                </head>
-                <body>
-                    ${fixedMdContent.replace(/\*\*用户：\*\*\n/g, '<h2>用户提问</h2><div class="user-question">')
-            .replace(/\*\*DeepSeek：\*\*\n/g, '</div><h2>AI 回答</h2><div class="ai-answer">')
-            .replace(/\*\*思考链\*\*\n/g, '</div><h2>思维链</h2><div class="ai-chain">')
-            .replace(/\n/g, '<br>')
-            .replace(/---/g, '</div><hr>')}
-                </body>
-            </html>
-        `;
+//     const printContent = `
+//             <html>
+//                 <head>
+//                     <title>DeepSeek Chat Export</title>
+//                     <style>
+//                         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
+//                         h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+//                         .ai-answer { color: #1a7f37; margin: 15px 0; }
+//                         .ai-chain { color: #666; font-style: italic; margin: 10px 0; }
+//                         hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
+//                     </style>
+//                 </head>
+//                 <body>
+//                     ${fixedMdContent.replace(/\*\*用户：\*\*\n/g, '<h2>用户提问</h2><div class="user-question">')
+//             .replace(/\*\*DeepSeek：\*\*\n/g, '</div><h2>AI 回答</h2><div class="ai-answer">')
+//             .replace(/\*\*思考链\*\*\n/g, '</div><h2>思维链</h2><div class="ai-chain">')
+//             .replace(/\n/g, '<br>')
+//             .replace(/---/g, '</div><hr>')}
+//                 </body>
+//             </html>
+//         `;
 
-    const printWindow = window.open("", "_blank");
-    printWindow.document.write(printContent);
-    printWindow.document.close();
-    setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
-}
+//     const printWindow = window.open("", "_blank");
+//     printWindow.document.write(printContent);
+//     printWindow.document.close();
+//     setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
+// }
 
 
 // ===================== 添加chrome消息通信机制 =====================
