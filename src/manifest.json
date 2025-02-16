@@ -1,0 +1,38 @@
+{
+    "manifest_version": 3,
+    "name": "DeepSeek2Markdown",
+    "version": "0.1",
+    "description": "Export DeepSeek conversations to Markdown",
+    "permissions": [
+      "activeTab",
+      "scripting"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "96": "icons/icon96.png",
+        "120": "icons/icon120.png",
+        "128": "icons/icon128.png"
+      }
+    },
+    "icons": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "96": "icons/icon96.png",
+      "120": "icons/icon120.png",
+      "128": "icons/icon128.png"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://chat.deepseek.com/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }

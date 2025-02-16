@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<head>
+    <title>DeepSeek Export</title>
+    <style>
+        body {
+            width: 200px;
+            padding: 10px;
+        }
+
+        button {
+            font-size: 16px;
+            border: 0;
+            border-radius: 10px;
+            color: rgb(255, 255, 255);
+            padding: 10px 20px;
+            background-color: #0072fc;
+        }
+
+        button:hover {
+            background-color: #3c94ff;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        .switch-container {
+            display: flex;
+            justify-content: left;
+            margin-bottom: 20px;
+        }
+        .switch-option {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .switch-option span {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="switch-container">
+        <div class="switch-box">
+            <div class="switch-option">
+                <span>导出思维链</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <div class="slider round"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <button id="exportButton">📄导出为Markdown</button>
+    <script src="popup.js"></script>
+</body>
+
+</html>
