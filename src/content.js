@@ -52,24 +52,32 @@ function extractThinkingChain(node) {
 }
 
 // 提取AI回答的内容
-function resolveTag_p(node) {
+function resolveTag_text(node) {
     let content = '';
     node.childNodes.forEach((childNode) => {
         if (childNode.nodeType === Node.TEXT_NODE) {
             content += childNode.textContent.trim();
-        } 
-        else if (childNode.classList && childNode.classList.contains('katex')) {
-            const tex = childNode.querySelector('annotation[encoding="application/x-tex"]');
-            if (tex) {
-                content += `$${tex.textContent.trim()}$`;
+        }
+        else if (childNode.tagName === 'P') {
+            if (childNode.childNodes.length > 1) {
+                content += resolveTag_text(childNode)
+            } else {
+                content += childNode.textContent.trim();
             }
-        } 
+        }
         else if (childNode.tagName === 'STRONG') {
-            content += `**${childNode.textContent.trim()}**`;
-        } 
+            if (childNode.childNodes.length > 1) {
+                content += resolveTag_text(childNode)
+            } else {
+                content += `**${childNode.textContent.trim()}**`;
+            }
+        }
+        else if (childNode.tagName === 'CODE') {
+            content += `\`${childNode.textContent.trim()}\``;
+        }
         else if (childNode.tagName === 'EM') {
             content += `*${childNode.textContent.trim()}*`;
-        } 
+        }
         else if (childNode.tagName === 'A') {
             const href = childNode.getAttribute('href');
             content += `[${childNode.textContent.trim()}](${href})`;
@@ -77,9 +85,16 @@ function resolveTag_p(node) {
         else if (childNode.tagName === 'BR') {
             content += '\n';
         }
-        else if (childNode.tagName === 'CODE') {
-            content += `\`${childNode.textContent.trim()}\``;
-        } 
+        else if (childNode.tagName === 'IMG') {
+            const src = childNode.getAttribute('src');
+            content += `![${childNode.getAttribute('alt')}](${src})`;
+        }
+        else if (childNode.classList && childNode.classList.contains('katex')) {
+            const tex = childNode.querySelector('annotation[encoding="application/x-tex"]');
+            if (tex) {
+                content += `$${tex.textContent.trim()}$`;
+            }
+        }
         else if (childNode.nodeType === Node.ELEMENT_NODE) {
             content += childNode.textContent.trim();
         }
@@ -97,57 +112,91 @@ function resolveTag_pre(preElement, language = 'python') {
     return markdownCodeBlock;
 }
 
-// ! 这段代码有问题，暂时不用，有空再修复。。。
+function resolveTag_table(tableElement) {
+    let markdown = '';
+
+    // 1. 处理表头
+    const headerRow = tableElement.querySelector('thead tr');
+    if (headerRow) {
+        const headers = Array.from(headerRow.querySelectorAll('th')).map(
+            (th) => th.textContent.trim()
+        );
+        markdown += `| ${headers.join(' | ')} |\n`; // 表头行
+        markdown += `| ${headers.map(() => '---').join(' | ')} |\n`; // 分隔行
+    }
+
+    // 2. 处理表格内容
+    const bodyRows = tableElement.querySelectorAll('tbody tr');
+    bodyRows.forEach((row) => {
+        const cells = Array.from(row.querySelectorAll('td')).map((td) =>
+            td.textContent.trim()
+        );
+        markdown += `| ${cells.join(' | ')} |\n`; // 数据行
+    });
+
+    return markdown.trim(); // 去除末尾换行
+}
+
 function resolveTag_ul_li(node) {
     let markdown = '';
 
     // 递归处理子节点
-    function processNode(node) {
-        if (node.nodeType === Node.TEXT_NODE) {
-            // 文本节点直接返回内容
-            return node.textContent.trim();
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            // 处理元素节点
-            const tagName = node.tagName.toLowerCase();
-            const children = Array.from(node.childNodes);
+    function processNode(element, depth = 0) {
+        // 用于存储最终的 Markdown 内容
+        let markdown = '';
 
-            switch (tagName) {
-                case 'ol':
-                    let olContent = '';
-                    children.forEach((child, index) => {
-                        if (child.tagName && child.tagName.toLowerCase() === 'li') {
-                            olContent += `${index + 1}. ${processNode(child)}\n`;
+        // UL 标签
+        if (element.tagName === 'UL') {
+            // 遍历 <ul> 或 <ol> 的子元素
+            for (let child of element.children) {
+                if (child.tagName === 'LI') {
+                    // 获取当前层级的缩进空格
+                    let indent = ' '.repeat(depth * 4);
+                    // 获取 <li> 内的文本内容
+                    child.childNodes.forEach((childNode) => {
+                        if (childNode.tagName === 'P') {
+                            markdown += `${indent}- ${resolveTag_text(childNode)}\n`;
+                        }
+                        else if (childNode.classList.contains('md-code-block')) {
+                            codeblock = resolveTag_pre(childNode.querySelector('pre'), childNode.querySelector('.md-code-block-infostring').textContent.trim());
+                            codeblock = codeblock.replaceAll('\n', `\n${indent}`);
+                            markdown += `${indent}${codeblock}\n`;
                         }
                     });
-                    console.log('olcontent', olContent);
-                    return olContent;
-                case 'ul':
-                    let ulContent = '';
-                    children.forEach((child) => {
-                        if (child.tagName && child.tagName.toLowerCase() === 'li') {
-                            ulContent += `- ${processNode(child)}\n`;
-                        }
-                    });
-                    console.log('ulcontent', ulContent);
-                    return ulContent;
-                case 'li':
-                    return children.map((child) => processNode(child)).join('');
-                case 'p':
-                    return children.map((child) => processNode(child)).join('') + '\n\n';
-                case 'strong':
-                    return `**${children.map((child) => processNode(child)).join('')}**`;
-                case 'br':
-                    return '\n';
-                case 'code': 
-                    return `\`${node.textContent.trim()}\``;
-                case 'pre':
-                    return resolveTag_pre(node);
-                default:
-                    // 其他元素（如 span）直接处理其子节点
-                    return children.map((child) => processNode(child)).join('');
+
+                    let nestedList = child.querySelector('ul, ol');
+                    if (nestedList) {
+                        markdown += processNode(nestedList, depth + 1);
+                    }
+                }
             }
         }
-        return '';
+        else if (element.tagName === 'OL') {
+            // 遍历 <ul> 或 <ol> 的子元素
+            for (let child of element.children) {
+                if (child.tagName === 'LI') {
+                    // 获取当前层级的缩进空格
+                    let indent = ' '.repeat(depth * 4);
+                    // 获取 <li> 内的文本内容
+                    child.childNodes.forEach((childNode) => {
+                        if (childNode.tagName === 'P') {
+                            markdown += `${indent}1. ${resolveTag_text(childNode)}\n`;
+                        }
+                        else if (childNode.classList.contains('md-code-block')) {
+                            codeblock = resolveTag_pre(childNode.querySelector('pre'), childNode.querySelector('.md-code-block-infostring').textContent.trim());
+                            codeblock = codeblock.replaceAll('\n', `\n${indent}`);
+                            markdown += `${indent}${codeblock}\n`;
+                        }
+                    });
+
+                    let nestedList = child.querySelector('ul, ol');
+                    if (nestedList) {
+                        markdown += processNode(nestedList, depth + 1);
+                    }
+                }
+            }
+        }
+        return markdown;
     }
     // 开始处理根节点
     markdown = processNode(node);
@@ -169,37 +218,42 @@ function extractFinalAnswer(node) {
         .ds-markdown--block>blockquote,\
         .ds-markdown--block>ol,\
         .ds-markdown--block>ul,\
+        .ds-markdown--block>table,\
         .katex-display.ds-markdown-math, \
         hr');
 
     elements.forEach((element) => {
         if (element.tagName.toLowerCase() === 'p') {
-            answerContent += resolveTag_p(element);
+            answerContent += resolveTag_text(element);
             answerContent += '\n\n';
         }
         else if (element.tagName.toLowerCase() === 'h1') {
-            answerContent += `# ${element.textContent.trim()}\n\n`;
+            answerContent += `# ${resolveTag_text(element)}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'h2') {
-            answerContent += `## ${element.textContent.trim()}\n\n`;
+            answerContent += `## ${resolveTag_text(element)}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'h3') {
-            answerContent += `### ${element.textContent.trim()}\n\n`;
+            
+            answerContent += `### ${resolveTag_text(element)}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'h4') {
-            answerContent += `#### ${element.textContent.trim()}\n\n`;
+            answerContent += `#### ${resolveTag_text(element)}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'h5') {
-            answerContent += `##### ${element.textContent.trim()}\n\n`;
+            answerContent += `##### ${resolveTag_text(element)}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'hr') {
             answerContent += '\n---\n';
         }
         else if (element.tagName.toLowerCase() === 'blockquote') {
-            answerContent += `> ${resolveTag_p(element.querySelector('p'))}\n\n`;
+            answerContent += `> ${resolveTag_text(element.querySelector('p'))}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'ul' || element.tagName.toLowerCase() === 'ol') {
             answerContent += `${resolveTag_ul_li(element)}\n\n`;
+        }
+        else if (element.tagName.toLowerCase() === 'table') {
+            answerContent += `${resolveTag_table(element)}\n\n`;
         }
         else if (element.classList.contains('katex-display')) {
             const tex = element.querySelector('annotation[encoding="application/x-tex"]');

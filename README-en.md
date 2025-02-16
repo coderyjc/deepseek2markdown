@@ -65,8 +65,9 @@ v0.1
 - [x] Optimize the markdown text formatting
 - [x] Choose whether or not to export the thought chain
 - [x] Optimizing styles for code export
-- [ ] Optimizing export styles for multi-level lists
-- [ ] upport for exporting tables
+- [x] Support for exporting tables
+- [x] Support for exporting images
+- [x] Optimizing export styles for multi-level lists
 
 ## Feedback and contribution
 
