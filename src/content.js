@@ -57,21 +57,30 @@ function resolveTag_p(node) {
     node.childNodes.forEach((childNode) => {
         if (childNode.nodeType === Node.TEXT_NODE) {
             content += childNode.textContent.trim();
-        } else if (childNode.classList && childNode.classList.contains('katex')) {
+        } 
+        else if (childNode.classList && childNode.classList.contains('katex')) {
             const tex = childNode.querySelector('annotation[encoding="application/x-tex"]');
             if (tex) {
-                content += `$$${tex.textContent.trim()}$$`;
+                content += `$${tex.textContent.trim()}$`;
             }
-        } else if (childNode.tagName === 'STRONG') {
+        } 
+        else if (childNode.tagName === 'STRONG') {
             content += `**${childNode.textContent.trim()}**`;
-        } else if (childNode.tagName === 'EM') {
+        } 
+        else if (childNode.tagName === 'EM') {
             content += `*${childNode.textContent.trim()}*`;
-        } else if (childNode.tagName === 'A') {
+        } 
+        else if (childNode.tagName === 'A') {
             const href = childNode.getAttribute('href');
             content += `[${childNode.textContent.trim()}](${href})`;
-        } else if (childNode.tagName === 'CODE') {
+        }
+        else if (childNode.tagName === 'BR') {
+            content += '\n';
+        }
+        else if (childNode.tagName === 'CODE') {
             content += `\`${childNode.textContent.trim()}\``;
-        } else if (childNode.nodeType === Node.ELEMENT_NODE) {
+        } 
+        else if (childNode.nodeType === Node.ELEMENT_NODE) {
             content += childNode.textContent.trim();
         }
     });
@@ -150,7 +159,18 @@ function extractFinalAnswer(node) {
     if (!answerNode) return null;
 
     let answerContent = '';
-    const elements = answerNode.querySelectorAll('.ds-markdown--block .md-code-block, .ds-markdown--block p,.ds-markdown--block h1, .ds-markdown--block h2, .ds-markdown--block h3, .ds-markdown--block h4, .ds-markdown--block h5, .katex-display.ds-markdown-math, hr');
+    const elements = answerNode.querySelectorAll('.ds-markdown--block>.md-code-block, \
+        .ds-markdown--block>p,\
+        .ds-markdown--block>h1, \
+        .ds-markdown--block>h2,\
+        .ds-markdown--block>h3, \
+        .ds-markdown--block>h4, \
+        .ds-markdown--block>h5, \
+        .ds-markdown--block>blockquote,\
+        .ds-markdown--block>ol,\
+        .ds-markdown--block>ul,\
+        .katex-display.ds-markdown-math, \
+        hr');
 
     elements.forEach((element) => {
         if (element.tagName.toLowerCase() === 'p') {
@@ -175,10 +195,16 @@ function extractFinalAnswer(node) {
         else if (element.tagName.toLowerCase() === 'hr') {
             answerContent += '\n---\n';
         }
+        else if (element.tagName.toLowerCase() === 'blockquote') {
+            answerContent += `> ${resolveTag_p(element.querySelector('p'))}\n\n`;
+        }
+        else if (element.tagName.toLowerCase() === 'ul' || element.tagName.toLowerCase() === 'ol') {
+            answerContent += `${resolveTag_ul_li(element)}\n\n`;
+        }
         else if (element.classList.contains('katex-display')) {
             const tex = element.querySelector('annotation[encoding="application/x-tex"]');
             if (tex) {
-                answerContent += `$$${tex.textContent.trim()}$$\n\n`;
+                answerContent += `$${tex.textContent.trim()}$\n\n`;
             }
         }
         else if (element.classList.contains('md-code-block')) {

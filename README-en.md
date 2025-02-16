@@ -10,16 +10,10 @@ Export DeepSeek Dialogs to Markdown
 
 ## Features
 
-Original Dialog：
+Original Dialog / Exported Text(typora theme: [bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
 
 <div align=center>
-<img src="./doc/example-deepseek.png"/>
-</div>
-
-Exported Text(typora theme: [bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
-
-<div align=center>
-<img src="./doc/example-markdown.png"/>
+<img src="./doc/example.png"/>
 </div>
 
 ## Usage

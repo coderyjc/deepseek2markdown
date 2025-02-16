@@ -36,7 +36,10 @@ document.getElementById('exportButton').addEventListener('click', () => {
 });
 
 // 每次打开popup时，更新 switch 状态为 false
-chrome.tabs.sendMessage(activeTab.id, {
-    action: 'updateSwitchState',
-    state: false
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const activeTab = tabs[0];
+    chrome.tabs.sendMessage(activeTab.id, {
+        action: 'updateSwitchState',
+        state: false
+    });
 });

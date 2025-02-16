@@ -8,18 +8,12 @@
 
 导出DeepSeek的对话到Markdown文件
 
-## 特性
+## 演示
 
-原始对话：
-
-<div align=center>
-<img src="./doc/example-deepseek.png"/>
-</div>
-
-导出文本(typora主题为[bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
+原始对话 / 导出文本(typora主题为[bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
 
 <div align=center>
-<img src="./doc/example-markdown.png"/>
+<img src="./doc/example.png"/>
 </div>
 
 ## 使用方法
