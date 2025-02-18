@@ -16,6 +16,13 @@ Original Dialog / Exported Text(typora theme: [bluetex](https://github.com/DaYan
 <img src="./doc/example.png"/>
 </div>
 
+Original Dialog / Exported PDF
+
+<div align=center>
+<img src="./doc/example-pdf.png"/>
+</div>
+
+
 ## Usage
 
 ### 1. Load unzipped files
@@ -59,6 +66,9 @@ After you have unzipped .crx, follow method 1
 
 ## TODOs
 
+- [ ] Support export as PDF
+    - [x] Headings, chains of thought, text styles (bold, italics, Strikethrough) , lists, tables, links and images, code, quotes, hyphens, special symbols
+    - [ ] Beautify Codeblock Style\ Support export equals\Support highlight text.
 - [ ] Support export referance as super link
 - [ ] Support strict mode Markdown export
 - [ ] Support filtering out server busy messages

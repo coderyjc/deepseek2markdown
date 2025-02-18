@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "DeepSeek2Markdown",
     "version": "0.1",
-    "description": "Export DeepSeek conversations to Markdown",
+    "description": "Export DeepSeek Dialogs to Markdown",
     "permissions": [
       "activeTab",
       "scripting"
@@ -32,7 +32,8 @@
     "content_scripts": [
       {
         "matches": ["https://chat.deepseek.com/*"],
-        "js": ["content.js"]
+        "js": ["lib/marked.min.js", "content.js"],
+        "run_at": "document_end"
       }
     ]
   }

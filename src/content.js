@@ -237,7 +237,7 @@ function extractFinalAnswer(node) {
             answerContent += `## ${resolveTag_text(element)}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'h3') {
-            
+
             answerContent += `### ${resolveTag_text(element)}\n\n`;
         }
         else if (element.tagName.toLowerCase() === 'h4') {
@@ -324,50 +324,77 @@ function exportMarkdown() {
         alert("未找到聊天记录！");
         return;
     }
-
-    // const fixedMdContent = mdContent.replace(/(\*\*.*?\*\*)/g, '<strong>$1</strong>')
-    //     .replace(/\(\s*([^)]*)\s*\)/g, '\\($1\\)')
-    //     .replace(/\$\$\s*([^$]*)\s*\$\$/g, '$$$1$$');
-
     return mdContent;
 }
 
 // TODO 暂未开发
-// function exportPDF() {
-//     const mdContent = getOrderedMessages();
-//     if (!mdContent) return;
+function exportPDF() {
+    const mdContent = generateMdContent();
+    if (!mdContent) {
+        alert("未找到聊天记录！");
+        return;
+    }
 
-//     const fixedMdContent = mdContent.replace(/(\*\*.*?\*\*)/g, '<strong>$1</strong>')
-//         .replace(/\(\s*([^)]*)\s*\)/g, '\\($1\\)')
-//         .replace(/\$\$\s*([^$]*)\s*\$\$/g, '$$1$$');
+    fixedMdContent = marked.parse(mdContent)
+    const printContent = `
+            <html>
+                <head>
+                    <title>Export AS PDF</title>
+                    <style>
+                    body {
+                        font: 12px 'Arial', sans-serif;
+                        max-width: 800px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        line-height: 1.6;
+                    }
+                    pre {
+                        background-color: #f4f4f4;
+                        padding: 10px;
+                        border-radius: 5px;
+                        overflow-x: auto;
+                        font-family: 'Courier New', Consolas, Courier, monospace;
+                    }
 
-//     const printContent = `
-//             <html>
-//                 <head>
-//                     <title>DeepSeek Chat Export</title>
-//                     <style>
-//                         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
-//                         h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
-//                         .ai-answer { color: #1a7f37; margin: 15px 0; }
-//                         .ai-chain { color: #666; font-style: italic; margin: 10px 0; }
-//                         hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
-//                     </style>
-//                 </head>
-//                 <body>
-//                     ${fixedMdContent.replace(/\*\*用户：\*\*\n/g, '<h2>用户提问</h2><div class="user-question">')
-//             .replace(/\*\*DeepSeek：\*\*\n/g, '</div><h2>AI 回答</h2><div class="ai-answer">')
-//             .replace(/\*\*思考链\*\*\n/g, '</div><h2>思维链</h2><div class="ai-chain">')
-//             .replace(/\n/g, '<br>')
-//             .replace(/---/g, '</div><hr>')}
-//                 </body>
-//             </html>
-//         `;
+                    blockquote {
+                        border-left: 4px solid #ccc;
+                        margin: 1em 0;
+                        padding-left: 1em;
+                        color: #555;
+                        font-style: italic;
+                    }
 
-//     const printWindow = window.open("", "_blank");
-//     printWindow.document.write(printContent);
-//     printWindow.document.close();
-//     setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
-// }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    th, td {
+                        padding: 8px;
+                        text-align: left;
+                    }
+
+                    thead {
+                        border-bottom: 1px solid #000;
+                    }
+
+                    tbody tr:nth-child(even) {
+                    background-color: #f9f9f9;
+                    }
+
+                    tfoot {
+                    border-top: 3px solid #000;
+                    }
+
+                    </style>
+                </head>
+                <body>
+                    ${fixedMdContent}
+                </body>
+            </html>
+        `;
+    return printContent;
+}
 
 
 // ===================== 添加chrome消息通信机制 =====================
@@ -388,5 +415,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'generateMarkdown') {
         const markdown = exportMarkdown();
         sendResponse({ markdown, title: getUserSessionTitle() });
+    }
+    else if (request.action === 'generatePDF') {
+        const pdf = exportPDF();
+        sendResponse({ pdf })
     }
 });

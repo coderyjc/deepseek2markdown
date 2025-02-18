@@ -10,11 +10,18 @@
 
 ## 演示
 
-原始对话 / 导出文本(typora主题为[bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
+原始对话 / 导出Markdown文本(typora主题为[bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
 
 <div align=center>
 <img src="./doc/example.png"/>
 </div>
+
+原始对话 / 导出PDF
+
+<div align=center>
+<img src="./doc/example-pdf.png"/>
+</div>
+
 
 ## 使用方法
 
@@ -59,6 +66,9 @@
 
 ## 待办事项
 
+- [ ] 支持导出为PDF
+    - [x] 标题、思维链、文本样式（粗体、斜体、删除线）、列表、表格、链接和图片、代码、引用、分割线、特殊符号
+    - [ ] 代码块样式优化、支持公式导出、支持高亮文本
 - [ ] 支持将引用导出为超链接
 - [ ] 支持markdown严格模式导出
 - [ ] 支持过滤掉服务器繁忙的消息

@@ -15,8 +15,8 @@ switchInput.addEventListener('change', (event) => {
     });
 });
 
-// 添加导出的按钮
-document.getElementById('exportButton').addEventListener('click', () => {
+// 导出Markdown的按钮
+document.getElementById('exportAsMarkdown').addEventListener('click', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         // 向内容脚本发送消息
         chrome.tabs.sendMessage(tabs[0].id, { action: "generateMarkdown" }, (response) => {
@@ -32,6 +32,22 @@ document.getElementById('exportButton').addEventListener('click', () => {
             a.download = title + '.md';
             a.click();
         });
+    });
+});
+
+// 导出PDF的按钮
+document.getElementById('exportAsPDF').addEventListener('click', () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        // 向内容脚本发送消息
+        chrome.tabs.sendMessage(tabs[0].id, { action: "generatePDF" }, (response) => {
+            // 接收从 content.js 返回的 PDF 内容
+            const pdf = response.pdf;
+
+            const printWindow = window.open("", "_blank");
+            printWindow.document.write(pdf);
+            printWindow.document.close();
+            setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
+       });
     });
 });
 
