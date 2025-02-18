@@ -89,6 +89,9 @@ function resolveTag_text(node) {
             const src = childNode.getAttribute('src');
             content += `![${childNode.getAttribute('alt')}](${src})`;
         }
+        else if (childNode.tagName === 'SPAN' && childNode.classList.contains('ds-markdown-cite')) {
+            content += '';
+        }
         else if (childNode.classList && childNode.classList.contains('katex')) {
             const tex = childNode.querySelector('annotation[encoding="application/x-tex"]');
             if (tex) {

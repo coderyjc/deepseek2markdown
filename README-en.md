@@ -59,6 +59,7 @@ After you have unzipped .crx, follow method 1
 
 ## TODOs
 
+- [ ] Support export referance as super link
 - [ ] Support strict mode Markdown export
 - [ ] Support filtering out server busy messages
 - [ ] Support selecting specific messages in a conversation for export (custom selection of paragraphs, export only questions or answers)
