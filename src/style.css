@@ -1,0 +1,123 @@
+h1 {
+    font-size: 17px;
+    margin-top: 15px;
+    text-align: center;
+    width: 100%;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fb;
+    width: 260px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    padding: 12px 24px;
+    background-color: #0072fc;
+    margin-bottom: 15px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #005bb5;
+}
+
+.head-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.switch-container {
+    border: 2px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.switch-option {
+    display: flex;
+    align-items: center;
+}
+
+.switch-option span {
+    font-size: 18px;
+    margin-right: 10px;
+    color: #333;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 30px;
+    transition: background-color 0.3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+input:checked+.slider {
+    background-color: #4caf50;
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+#exportAsMarkdown,
+#exportAsPDF {
+    background-color: #28a745;
+}
+
+#exportAsMarkdown:hover,
+#exportAsPDF:hover {
+    background-color: #218838;
+}
+
+#exportAsPDF {
+    background-color: #dc3545;
+}
+
+#exportAsPDF:hover {
+    background-color: #a01c2a;
+}

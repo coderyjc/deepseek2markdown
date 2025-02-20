@@ -4,102 +4,15 @@
 
 <head>
     <title>DeepSeek Export</title>
-    <style>
-        body {
-            width: 200px;
-            padding: 10px;
-        }
-
-        button {
-            font-size: 14px;
-            border: 0;
-            border-radius: 10px;
-            color: rgb(255, 255, 255);
-            padding: 10px 20px;
-            background-color: #0072fc;
-            margin-bottom: 5px;
-        }
-
-        button:hover {
-            background-color: #3c94ff;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-
-        .switch input {
-            display: none;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        input:checked+.slider {
-            background-color: #2196F3;
-        }
-
-        input:focus+.slider {
-            box-shadow: 0 0 1px #2196F3;
-        }
-
-        input:checked+.slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-        }
-
-        /* Rounded sliders */
-        .slider.round {
-            border-radius: 34px;
-        }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-        
-        .switch-container {
-            display: flex;
-            justify-content: left;
-            margin-bottom: 20px;
-        }
-        .switch-option {
-            display: flex;
-            align-items: center;
-            margin-right: 10px;
-        }
-        .switch-option span {
-            font-size: 16px;
-            margin-right: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
+    <div class="head-container">
+        <img src="./icons/icon32.png" alt="icon">
+        <h1>DeepSeek2Markdown</h1>
+    </div>
+
     <div class="switch-container">
         <div class="switch-box">
             <div class="switch-option">
@@ -111,9 +24,9 @@
             </div>
         </div>
     </div>
-    
+
     <button id="exportAsMarkdown">📄导出为Markdown</button>
-    <button id="exportAsPDF">📕导出为PDF</button>
+    <button id="exportAsPDF">📑导出为PDF</button>
     <script src="popup.js"></script>
 </body>
 
