@@ -51,6 +51,17 @@ document.getElementById('exportAsPDF').addEventListener('click', () => {
     });
 });
 
+// 导出Image的按钮
+document.getElementById('exportAsImage').addEventListener('click', () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        // 向内容脚本发送消息
+        chrome.tabs.sendMessage(tabs[0].id, { action: "generateImage" }, (response) => {
+            // 导出为图像
+            console.log('导出成功...')
+        });
+    });
+});
+
 // 每次打开popup时，更新 switch 状态为 false
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const activeTab = tabs[0];
@@ -58,4 +69,18 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         action: 'updateSwitchState',
         state: false
     });
+});
+
+// TODO 需要测试一下这样是否可行。
+chrome.runtime.onInstalled.addListener((details) => {
+    if (details.reason === 'install') {
+        // 插件安装时执行
+        chrome.tabs.query({}, (tabs) => {
+            tabs.forEach(tab => {
+                if (tab.url && tab.url.startsWith('http')) {
+                    chrome.tabs.reload(tab.id);
+                }
+            });
+        });
+    }
 });

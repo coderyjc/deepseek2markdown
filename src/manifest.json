@@ -32,7 +32,7 @@
     "content_scripts": [
       {
         "matches": ["https://chat.deepseek.com/*"],
-        "js": ["lib/marked.min.js", "content.js"],
+        "js": ["lib/marked.min.js", "lib/html2canvas.min.js", "lib/canvas2image.js", "content.js"],
         "run_at": "document_end"
       }
     ]

@@ -35,7 +35,6 @@ function extractSearchOrThinking(node) {
     return hintNode ? `**${hintNode.textContent.trim()}**` : null;
 }
 
-
 // 思考过程
 function extractThinkingChain(node) {
     const thinkingNode = node.querySelector(config.thinkingChainSelector);
@@ -327,7 +326,7 @@ function exportMarkdown() {
     return mdContent;
 }
 
-// TODO 暂未开发
+// TODO 
 function exportPDF() {
     const mdContent = generateMdContent();
     if (!mdContent) {
@@ -396,6 +395,18 @@ function exportPDF() {
     return printContent;
 }
 
+function exportImage() {
+    const messages = [];
+    const chatContainer = document.querySelector(config.chatContainerSelector);
+    if (!chatContainer) {
+        console.error('未找到聊天容器');
+        return messages;
+    }
+    html2canvas(chatContainer).then(function(canvas) {
+        Canvas2Image.saveAsPNG(canvas);
+    });
+}
+
 
 // ===================== 添加chrome消息通信机制 =====================
 
@@ -415,6 +426,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'generateMarkdown') {
         const markdown = exportMarkdown();
         sendResponse({ markdown, title: getUserSessionTitle() });
+    }
+    else if (request.action === 'generateImage') {
+        image = exportImage();
+        sendResponse({ image });
     }
     else if (request.action === 'generatePDF') {
         const pdf = exportPDF();
