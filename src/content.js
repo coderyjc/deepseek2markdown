@@ -1,13 +1,15 @@
+
 // =====================
 // 配置
 // =====================
 const config = {
+    mainPageSelector: '.cb86951c', // 主页面
     chatContainerSelector: '.dad65929',  // 聊天框容器
     userClassPrefix: 'fa81',             // 用户消息 class 前缀
     aiClassPrefix: 'f9bf7997',           // AI消息相关 class 前缀
     aiReplyContainer: 'edb250b1',        // AI回复的主要容器
     searchHintSelector: '.a6d716f5.db5991dd', // 搜索/思考时间
-    thinkingChainSelector: '.e1675d8b',  // 思考链
+    thinkingChainSelector: '.edb250b1',  // 思考链
     userSessionTitleSelector: '.d8ed659a',    // 用户会话标题
     finalAnswerSelector: 'div.ds-markdown.ds-markdown--block', // 回答的内容
     isExportChainOfThought: false,        // 是否导出思考链
@@ -272,6 +274,22 @@ function extractFinalAnswer(node) {
     return `${answerContent.trim()}`;
 }
 
+function getFilteredContainer() {
+    const chatContainer = document.querySelector(config.chatContainerSelector);
+    if (!chatContainer) {
+        console.error('未找到聊天容器');
+        return messages;
+    }
+    for (const node of chatContainer.children) {
+        if (isAIMessage(node)) {
+            if (!config.isExportChainOfThought && (node.querySelector(`${config.thinkingChainSelector}`) != null)) {
+                node.removeChild(node.querySelector(`${config.thinkingChainSelector}`));
+            }
+        }
+    }
+    return chatContainer;
+}
+
 function getOrderedMessages() {
     const messages = [];
     const chatContainer = document.querySelector(config.chatContainerSelector);
@@ -395,15 +413,15 @@ function exportPDF() {
     return printContent;
 }
 
+
 function exportImage() {
-    const messages = [];
-    const chatContainer = document.querySelector(config.chatContainerSelector);
+    let chatContainer = document.querySelector(config.chatContainerSelector);
     if (!chatContainer) {
         console.error('未找到聊天容器');
-        return messages;
     }
-    html2canvas(chatContainer).then(function(canvas) {
-        Canvas2Image.saveAsPNG(canvas);
+    chatContainer = getFilteredContainer();
+    html2canvas(chatContainer).then(function (canvas) {
+        Canvas2Image.saveAsPNG(canvas, canvas.width, canvas.height, getUserSessionTitle());
     });
 }
 
@@ -428,11 +446,41 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ markdown, title: getUserSessionTitle() });
     }
     else if (request.action === 'generateImage') {
-        image = exportImage();
-        sendResponse({ image });
+        exportImage();
+        // sendResponse({ image });
     }
     else if (request.action === 'generatePDF') {
         const pdf = exportPDF();
-        sendResponse({ pdf })
+        sendResponse({ pdf });
+    } else if (request.action === 'showNotificationImage') {
+        // 创建消息框
+        const notificationDiv = document.createElement('div');
+        notificationDiv.id = 'notification';
+        notificationDiv.style.position = 'fixed';
+        notificationDiv.style.top = '20px';
+        notificationDiv.style.left = '50%';
+        notificationDiv.style.transform = 'translateX(-50%)';
+        notificationDiv.style.backgroundColor = '#4CAF50';
+        notificationDiv.style.color = 'white';
+        notificationDiv.style.padding = '10px 25px';
+        notificationDiv.style.borderRadius = '5px';
+        notificationDiv.style.zIndex = '1000';
+
+        notificationDiv.textContent = '开始下载...';
+
+        try {
+            exportImage()
+            document.querySelector('.cb86951c').appendChild(notificationDiv);
+        } catch (error) {
+            console.log(error)
+            notificationDiv.textContent = '下载失败';
+            notificationDiv.style.backgroundColor = '#fa3668';
+            document.querySelector('.cb86951c').appendChild(notificationDiv);
+        }
+
+        // 3秒后移除消息框
+        setTimeout(() => {
+            notificationDiv.remove();
+        }, 2000);
     }
 });

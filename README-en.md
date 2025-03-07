@@ -6,90 +6,112 @@
 <a href="./README.md">简体中文</a> | English
 </div>
 
-Export DeepSeek Dialogs to Markdown
+Export DeepSeek conversations to Markdown files
+
+> If the button does not respond, please refresh the page and try again.
 
 ## Features
 
-Original Dialog / Exported Text(typora theme: [bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
+Plugin interface
+
+<div align=center>
+<img src="./doc/popup.png" width="300"/>
+</div>
+
+>Note: After clicking the "Export to PDF" button, an HTML page will pop up. You can use the web page print function to save it as a PDF file.
+>
+>If the code blocks do not display correctly when exporting images, try exporting again.
+>
+>If you have a better method, you are welcome to submit a PR. Thank you.
+
+Original conversation / Exported Markdown text (typora theme is bluetex):
 
 <div align=center>
 <img src="./doc/example.png"/>
 </div>
 
-Original Dialog / Exported PDF
+Original conversation / Exported PDF
 
 <div align=center>
 <img src="./doc/example-pdf.png"/>
 </div>
 
+Original conversation / Exported image
+
+<div align=center>
+<img src="./doc/example-image.png" width="400"/> 
+</div>
 
 ## Usage
 
-### 1. Load unzipped files
+### Method 1: Load unpacked files
 
-1. Open the Chrome browser's load extension page [chrome://extensions/](chrome://extensions/)
+1. Open the Chrome browser's extension loading page chrome://extensions/
 
 <div align=center>
 <img src="./doc/step1.png" width="400"/>
 </div>
 
-2. Load unzipped files。Suppose the directory I download is `D:\code\github\deepseek2markdown`，Open `D:\code\github\deepseek2markdown\src` and click “Choose the folder”，load contents of the folder.
+2. Load the unpacked extension. Assuming the downloaded directory is D:\code\github\deepseek2markdown, you should open D:\code\github\deepseek2markdown\src and click "Select Folder" to load the contents of the src folder.
 
 <div align=center>
 <img src="./doc/step2.png" width="400"/>
 </div>
 
 <div align=center>
-<img src="./doc/step3.png" width="400" />
+<img src="./doc/step3.png" width="400" /> 
 </div>
 
-3. Pin the plugin to the plug-in bar
+3. Pin the plugin in the plugin bar
 
-**Attention: You should refresh the DeepSeek web page before loading the plug-in for the first time.**
+**Note: If you have opened the DeepSeek webpage before using the plugin for the first time, you should refresh it first.**
 
 <div align=center>
-<img src="./doc/step4.png" width="400" />
+<img src="./doc/step4.png" width="300" /> 
 </div>
 
-4. Click on the button to extract the current conversation Markdown file, you can check whether to export the chain of thought
+4. Click the button to extract the current conversation's markdown file. You can choose whether to export the thought chain.
 
 <div align=center>
-<img src="./doc/step5.png" width="400" />
+<img src="./doc/popup.png" width="300" />
 </div>
 
+### Method 2: Install crx file
 
-### 2. install .crx
+The application is not yet available on the Chrome Extension Store. It is recommended to use Method 1.
 
-The extension is not yet available in chrome extension store. Method 1 is recommended.
+The installation method is to unzip the crx file and follow Method 1.
 
-After you have unzipped .crx, follow method 1
+## To-Do List
 
-## TODOs
-
-- [ ] Support export as PDF
-    - [x] Headings, chains of thought, text styles (bold, italics, Strikethrough) , lists, tables, links and images, code, quotes, hyphens, special symbols
-    - [ ] Beautify Codeblock Style\ Support export equals\Support highlight text.
-- [ ] Support export referance as super link
+- [ ] Support exporting to PDF
+    - [x] Titles, thought chains, text styles (bold, italic, strikethrough), lists, tables, links and images, code, quotes, dividers, special symbols
+    - [ ] Code block style optimization, support for formula export, support for highlighted text
+- [ ] Support exporting references as hyperlinks
 - [ ] Support strict mode Markdown export
 - [ ] Support filtering out server busy messages
-- [ ] Support selecting specific messages in a conversation for export (custom selection of paragraphs, export only questions or answers)
+- [ ] Support exporting specific messages from a conversation (custom selection of paragraphs, export only questions or answers)
 - [ ] Support batch export of conversations
 
+v0.2
+
+- [x] Added image export function
 
 v0.1
 
-- [x] Beautify popup.html
-- [x] Optimize the markdown text formatting
-- [x] Choose whether or not to export the thought chain
-- [x] Optimizing styles for code export
+- [x] Popup interface beautification
+- [x] Optimized markdown text export format
+- [x] Option to export thought chain
+- [x] Optimized code export style
 - [x] Support for exporting tables
 - [x] Support for exporting images
-- [x] Optimizing export styles for multi-level lists
+- [x] Optimized export style for multi-level lists
 
-## Feedback and contribution
+## Feedback and Contributions
 
-If you encounter problems in the process of using or have suggestions for improvement, welcome to submit Issue or PR
+If you encounter any issues or have suggestions for improvement, please feel free to submit an Issue or PR.
 
-## Acknowledgement
+## Acknowledgments
 
 [DeepSeek-Chat-Exporter](https://github.com/blueberrycongee/DeepSeek-Chat-Exporter)
+

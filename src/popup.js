@@ -43,6 +43,7 @@ document.getElementById('exportAsPDF').addEventListener('click', () => {
             // 接收从 content.js 返回的 PDF 内容
             const pdf = response.pdf;
 
+            // 创建一个新窗口并打印 PDF
             const printWindow = window.open("", "_blank");
             printWindow.document.write(pdf);
             printWindow.document.close();
@@ -55,10 +56,8 @@ document.getElementById('exportAsPDF').addEventListener('click', () => {
 document.getElementById('exportAsImage').addEventListener('click', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         // 向内容脚本发送消息
-        chrome.tabs.sendMessage(tabs[0].id, { action: "generateImage" }, (response) => {
-            // 导出为图像
-            console.log('导出成功...')
-        });
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'showNotificationImage' });
+        console.log('exportAsImage');
     });
 });
 

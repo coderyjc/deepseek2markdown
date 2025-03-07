@@ -8,7 +8,21 @@
 
 导出DeepSeek的对话到Markdown文件
 
-## 演示
+> 如果点击按钮没反应，请直接刷新页面后进行尝试。
+
+## 特性
+
+插件界面
+
+<div align=center>
+<img src="./doc/popup.png" width="300"/>
+</div>
+
+> 注：点击导出为PDF按钮之后会弹出一个HTML页面，可以使用网页打印功能保存为PDF文件。
+> 
+> 导出图像的时候如果代码块显示不正常，可以尝试重新导出。
+> 
+> 如果有更好的方法，也欢迎为我提PR，谢谢你。
 
 原始对话 / 导出Markdown文本(typora主题为[bluetex](https://github.com/DaYangtuo247/typora-blueTex-theme))：
 
@@ -22,6 +36,11 @@
 <img src="./doc/example-pdf.png"/>
 </div>
 
+原始对话 / 导出图像
+
+<div align=center>
+<img src="./doc/example-image.png"  width="400"/>
+</div>
 
 ## 使用方法
 
@@ -54,9 +73,8 @@
 4. 点击按钮提取当前对话的markdown文件，可勾选是否导出思维链
 
 <div align=center>
-<img src="./doc/step5.png" width="300" />
+<img src="./doc/popup.png" width="300" />
 </div>
-
 
 ### 方法二：安装crx文件
 
@@ -75,6 +93,9 @@
 - [ ] 支持选择一段对话中的特定消息导出（自定义选择段落、只导出提问或者回答）
 - [ ] 支持批量导出对话
 
+v0.2
+
+- [x] 添加图片导出功能
 
 v0.1
 
