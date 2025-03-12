@@ -13,6 +13,7 @@ const config = {
     userSessionTitleSelector: '.d8ed659a',    // 用户会话标题
     finalAnswerSelector: 'div.ds-markdown.ds-markdown--block', // 回答的内容
     isExportChainOfThought: false,        // 是否导出思考链
+    isExportBusyServerMessages: false,    // 是否导出繁忙消息，默认不导出
 };
 
 // =====================
@@ -301,7 +302,15 @@ function getOrderedMessages() {
     for (const node of chatContainer.children) {
         if (isUserMessage(node)) {
             // 用户消息
-            messages.push(`# 用户：\n\n${node.textContent.trim()}`);
+            const userMessage = `# 用户：\n\n${node.textContent.trim()}`;
+            const nextNode = node.nextElementSibling;
+            if (nextNode && isAIMessage(nextNode)) {
+                const finalAnswer = extractFinalAnswer(nextNode);
+                if (finalAnswer && finalAnswer.includes("服务器繁忙，请稍后再试。") && !config.isExportBusyServerMessages) {
+                    continue; // 跳过当前用户消息和AI消息
+                }
+            }
+            messages.push(userMessage);
         } else if (isAIMessage(node)) {
             // AI 消息
             let output = '';
@@ -318,6 +327,9 @@ function getOrderedMessages() {
                 if (searchHint) output += `${searchHint}\n`;
             }
             const finalAnswer = extractFinalAnswer(node);
+            if (finalAnswer && finalAnswer.includes("服务器繁忙，请稍后再试。") && !config.isExportBusyServerMessages) {
+                continue; // 跳过当前AI消息
+            }
             if (finalAnswer) output = `# DeepSeek：\n${output}\n**原始回答**\n\n${finalAnswer}\n\n`;
             if (output.trim()) {
                 messages.push(output.trim());
@@ -430,7 +442,7 @@ function exportImage() {
 
 // 监听来自 popup.js 的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'updateSwitchState') {
+    if (request.action === 'updateExportChainOfThoughtState') {
         const switchState = request.state;
         if (switchState) {
             config.isExportChainOfThought = true;
@@ -439,6 +451,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
     }
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {   
+    if (request.action === 'updateBlockBusyMessagesState') {
+        const switchState = request.state;
+        if (switchState) {
+            config.isExportBusyServerMessages = true;
+        } else {
+            config.isExportBusyServerMessages = false;
+        }
+    }
+});
+
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'generateMarkdown') {

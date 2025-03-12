@@ -13,10 +13,26 @@
             font-family: Arial, sans-serif;
             color: #333;
         }
+        .switch-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .switch-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .switch-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* 使label位于父元素右对齐 */
+            gap: 10px;
+            width: 100%; /* 确保子元素可以在父元素内两端对齐 */
+        }
     </style>
 </head>
 <body>
-
     <div class="head-container">
         <img src="./icons/icon32.png" alt="icon">
         <h1>DeepSeek2Markdown</h1>
@@ -26,7 +42,14 @@
             <div class="switch-option">
                 <span>导出思维链</span>
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="exportChainOfThought">
+                    <div class="slider round"></div>
+                </label>
+            </div>
+            <div class="switch-option">
+                <span>导出消息繁忙</span>
+                <label class="switch">
+                    <input type="checkbox" id="blockBusyMessages">
                     <div class="slider round"></div>
                 </label>
             </div>
@@ -36,6 +59,9 @@
     <button id="exportAsPDF">📕导出为PDF</button>
     <button id="exportAsImage">🏞️导出为图像</button>
     <script src="popup.js"></script>
+    <div style="position: fixed; bottom: 10px; right: 10px; font-size: 12px; color: #666;">
+        v0.2.1
+    </div>
 </body>
 
 </html>

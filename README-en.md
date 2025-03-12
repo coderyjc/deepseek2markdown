@@ -87,14 +87,12 @@ The installation method is to unzip the crx file and follow Method 1.
 - [ ] Support exporting to PDF
     - [x] Titles, thought chains, text styles (bold, italic, strikethrough), lists, tables, links and images, code, quotes, dividers, special symbols
     - [ ] Code block style optimization, support for formula export, support for highlighted text
-- [ ] Support exporting references as hyperlinks
-- [ ] Support strict mode Markdown export
-- [ ] Support filtering out server busy messages
 - [ ] Support exporting specific messages from a conversation (custom selection of paragraphs, export only questions or answers)
-- [ ] Support batch export of conversations
 
 v0.2
 
+- [x] Support strict mode Markdown export
+- [x] Support filtering out server busy messages
 - [x] Added image export function
 
 v0.1

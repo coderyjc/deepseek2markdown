@@ -1,19 +1,36 @@
-// 获取 input 元素
-const switchInput = document.querySelector('.switch-container .switch input[type="checkbox"]');
-
+// 获取第一个开关元素（导出思维链）
+const exportSwitch = document.getElementById('exportChainOfThought');
 // 监听 switch 状态变化
-switchInput.addEventListener('change', (event) => {
+exportSwitch.addEventListener('change', (event) => {
     const isChecked = event.target.checked;
 
     // 发送消息给 content.js
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const activeTab = tabs[0];
         chrome.tabs.sendMessage(activeTab.id, {
-            action: 'updateSwitchState',
+            action: 'updateExportChainOfThoughtState',
             state: isChecked
         });
     });
 });
+
+// 获取第二个开关元素（屏蔽消息繁忙）
+const busySwitch = document.getElementById('blockBusyMessages');
+
+exportSwitch.addEventListener('change', (event) => {
+    const isChecked = event.target.checked;
+
+    // 发送消息给 content.js
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        chrome.tabs.sendMessage(activeTab.id, {
+            action: 'updateBlockBusyMessagesState',
+            state: isChecked
+        });
+    });
+});
+
+
 
 // 导出Markdown的按钮
 document.getElementById('exportAsMarkdown').addEventListener('click', () => {
@@ -66,6 +83,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const activeTab = tabs[0];
     chrome.tabs.sendMessage(activeTab.id, {
         action: 'updateSwitchState',
+        state: false
+    });
+    chrome.tabs.sendMessage(activeTab.id, {
+        action: 'updateBlockBusyMessagesState',
         state: false
     });
 });
