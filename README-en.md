@@ -87,6 +87,7 @@ The installation method is to unzip the crx file and follow Method 1.
 v0.3
 
 - [x] Support exporting specific messages from a conversation (custom selection of paragraphs, export only questions or answers)
+- [x] Popup supports switching between Chinese and English
 
 v0.2
 

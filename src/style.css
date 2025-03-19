@@ -14,12 +14,12 @@ body {
 }
 
 button {
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
     border: none;
     border-radius: 10px;
     color: #fff;
-    padding: 12px 24px;
+    padding: 8px 24px;
     background-color: #0072fc;
     margin-bottom: 15px;
     width: 100%;
@@ -40,14 +40,15 @@ button:hover {
 
 .switch-container {
     border: 2px solid #ccc;
-    padding: 15px;
+    padding: 8px;
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .message-box {
@@ -58,28 +59,25 @@ button:hover {
     color: #333;
 }
 
-.switch-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
 .switch-box {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 }
 
 .switch-option {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* 使label位于父元素右对齐 */
+    justify-content: space-between;
+    /* 使label位于父元素右对齐 */
     gap: 10px;
-    width: 100%; /* 确保子元素可以在父元素内两端对齐 */
+    width: 100%;
+    /* 确保子元素可以在父元素内两端对齐 */
 }
 
 .switch-option span {
-    font-size: 18px;
+    font-size: 13px;
     margin-right: 10px;
     color: #333;
 }
@@ -88,7 +86,7 @@ button:hover {
     position: relative;
     display: inline-block;
     width: 50px;
-    height: 30px;
+    height: 28px;
 }
 
 .switch input {
@@ -110,13 +108,40 @@ button:hover {
 .slider:before {
     position: absolute;
     content: "";
-    height: 22px;
-    width: 22px;
+    height: 20px;
+    width: 20px;
     left: 4px;
     bottom: 4px;
     background-color: white;
     border-radius: 50%;
     transition: transform 0.3s;
+}
+
+.footer {
+    position: fixed;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    padding: 0 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.footer button {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #F4F7FB;
+    cursor: pointer;
+    width: 80px;
+    color: blue;
+}
+
+.footer span {
+    font-size: 12px;
+    color: #666;
 }
 
 input:checked+.slider {

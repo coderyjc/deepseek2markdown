@@ -80,3 +80,56 @@ chrome.runtime.onInstalled.addListener((details) => {
         });
     }
 });
+
+// 语言配置
+const translations = {
+    zh: {
+        exportChainOfThought: "导出思维链",
+        blockBusyMessages: "导出消息繁忙",
+        exportBatch: "📦批量导出",
+        exportAsMarkdown: "📄导出为Markdown",
+        exportAsPDF: "📕导出为PDF",
+        exportAsImage: "🏞️导出为图像",
+        languageToggle: "中文|EN"
+    },
+    en: {
+        exportChainOfThought: "Export Chain of Thought",
+        blockBusyMessages: "Export Busy Messages",
+        exportBatch: "📦Batch Export",
+        exportAsMarkdown: "📄Export as Markdown",
+        exportAsPDF: "📕Export as PDF",
+        exportAsImage: "🏞️Export as Image",
+        languageToggle: "中文|EN"
+    }
+};
+
+// 当前语言
+let currentLang = 'zh';
+
+// 更新页面文本
+function updateLanguage(lang) {
+    currentLang = lang;
+    // 更新所有文本内容
+    document.querySelector('.switch-option:nth-child(1) span').textContent = translations[lang].exportChainOfThought;
+    document.querySelector('.switch-option:nth-child(2) span').textContent = translations[lang].blockBusyMessages;
+    document.getElementById('exportBatch').textContent = translations[lang].exportBatch;
+    document.getElementById('exportAsMarkdown').textContent = translations[lang].exportAsMarkdown;
+    document.getElementById('exportAsPDF').textContent = translations[lang].exportAsPDF;
+    document.getElementById('exportAsImage').textContent = translations[lang].exportAsImage;
+    document.getElementById('languageToggle').textContent = translations[lang].languageToggle;
+    
+    // 保存语言设置
+    chrome.storage.local.set({ language: lang });
+}
+
+// 语言切换按钮事件监听
+document.getElementById('languageToggle').addEventListener('click', () => {
+    const newLang = currentLang === 'zh' ? 'en' : 'zh';
+    updateLanguage(newLang);
+});
+
+// 初始化语言设置
+chrome.storage.local.get('language', (result) => {
+    const savedLang = result.language || 'zh';
+    updateLanguage(savedLang);
+});
