@@ -5,16 +5,25 @@
 const config = {
     mainPageSelector: '.cb86951c', // 主页面
     chatContainerSelector: '.dad65929',  // 聊天框容器
+    
     userClassPrefix: 'fa81',             // 用户消息 class 前缀
+    
     aiClassPrefix: 'f9bf7997',           // AI消息相关 class 前缀
-    aiReplyContainer: 'edb250b1',        // AI回复的主要容器
-    searchHintSelector: '.a6d716f5.db5991dd', // 搜索/思考时间
-    thinkingChainSelector: '.edb250b1',  // 思考链
+
+    aiChainOfThought: '.edb250b1',        // AI的思维链, 包含"已深度思考xxx秒"和"思考过程"
+    searchHintSelector: '.a6d716f5.db5991dd', // 搜索/思考时间, "已深度思考xxx秒"
+    thinkingChainSelector: '.e1675d8b',  // 思考链, "思考过程"
+    
     userSessionTitleSelector: '.d8ed659a',    // 用户会话标题
     finalAnswerSelector: 'div.ds-markdown.ds-markdown--block', // 回答的内容
     isExportChainOfThought: false,        // 是否导出思考链
     isExportBusyServerMessages: false,    // 是否导出繁忙消息，默认不导出
 };
+
+function initConfig() {
+    config.isExportChainOfThought = false;
+    config.isExportBusyServerMessages = false;
+}
 
 // =====================
 // 工具函数
@@ -51,6 +60,25 @@ function extractThinkingChain(node) {
         }
     });
     return thinkingNode ? output : null;
+}
+
+// 下载markdown内容
+function downloadMarkdown(markdown, title) {
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = title + '.md';
+    a.click();
+}
+
+// 下载PDF内容
+function downloadPDF(pdf, title) {
+    const printWindow = window.open("", "_blank");
+    printWindow.document.title = title;
+    printWindow.document.write(pdf);
+    printWindow.document.close();
+    setTimeout(() => { printWindow.print(); }, 500);
 }
 
 // 提取AI回答的内容
@@ -283,8 +311,10 @@ function getFilteredContainer() {
     }
     for (const node of chatContainer.children) {
         if (isAIMessage(node)) {
-            if (!config.isExportChainOfThought && (node.querySelector(`${config.thinkingChainSelector}`) != null)) {
-                node.removeChild(node.querySelector(`${config.thinkingChainSelector}`));
+            const thinkingChainNode = node.querySelector(`${config.aiChainOfThought}`);
+
+            if (!config.isExportChainOfThought && thinkingChainNode && node.contains(thinkingChainNode)){
+                node.removeChild(thinkingChainNode);
             }
         }
     }
@@ -303,25 +333,26 @@ function getOrderedMessages() {
         if (isUserMessage(node)) {
             // 用户消息
             const userMessage = `# 用户：\n\n${node.textContent.trim()}`;
+
             const nextNode = node.nextElementSibling;
             if (nextNode && isAIMessage(nextNode)) {
                 const finalAnswer = extractFinalAnswer(nextNode);
                 if (finalAnswer && finalAnswer.includes("服务器繁忙，请稍后再试。") && !config.isExportBusyServerMessages) {
-                    continue; // 跳过当前用户消息和AI消息
+                    continue; // 跳过当前用户消息
                 }
             }
             messages.push(userMessage);
         } else if (isAIMessage(node)) {
             // AI 消息
             let output = '';
-            const aiReplyContainer = node.querySelector(`.${config.aiReplyContainer}`);
-            if (aiReplyContainer) {
+            const aiChainOfThought = node.querySelector(`${config.aiChainOfThought}`);
+            if (aiChainOfThought && config.isExportChainOfThought) {
                 // 已深度思考xxx秒
-                const searchHint = extractSearchOrThinking(aiReplyContainer);
-                if (config.isExportChainOfThought && searchHint) output += `> ${searchHint}\n> \n`;
+                const searchHint = extractSearchOrThinking(aiChainOfThought);
+                if (searchHint) output += `> ${searchHint}\n> \n`;
                 // 思考过程
-                const thinkingChain = extractThinkingChain(aiReplyContainer);
-                if (config.isExportChainOfThought && thinkingChain) output += `${thinkingChain}\n`;
+                const thinkingChain = extractThinkingChain(aiChainOfThought);
+                if (thinkingChain) output += `${thinkingChain}\n`;
             } else {
                 const searchHint = extractSearchOrThinking(node);
                 if (searchHint) output += `${searchHint}\n`;
@@ -339,8 +370,10 @@ function getOrderedMessages() {
     return messages;
 }
 
-function generateMdContent() {
-    const messages = getOrderedMessages();
+function generateMdContent(messages = '') {
+    if (!messages) {
+        messages = getOrderedMessages();
+    }
     return messages.length ? messages.join('\n\n') : '';
 }
 
@@ -425,7 +458,6 @@ function exportPDF() {
     return printContent;
 }
 
-
 function exportImage() {
     let chatContainer = document.querySelector(config.chatContainerSelector);
     if (!chatContainer) {
@@ -441,6 +473,7 @@ function exportImage() {
 // ===================== 添加chrome消息通信机制 =====================
 
 // 监听来自 popup.js 的消息
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'updateExportChainOfThoughtState') {
         const switchState = request.state;
@@ -450,10 +483,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             config.isExportChainOfThought = false;
         }
     }
-});
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {   
-    if (request.action === 'updateBlockBusyMessagesState') {
+    else if (request.action === 'updateBlockBusyMessagesState') {
         const switchState = request.state;
         if (switchState) {
             config.isExportBusyServerMessages = true;
@@ -461,22 +491,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             config.isExportBusyServerMessages = false;
         }
     }
-});
-
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'generateMarkdown') {
+    else if (request.action === 'generateMarkdown') {
         const markdown = exportMarkdown();
-        sendResponse({ markdown, title: getUserSessionTitle() });
+        downloadMarkdown(markdown, getUserSessionTitle());
+        initConfig();
     }
     else if (request.action === 'generateImage') {
         exportImage();
-        // sendResponse({ image });
+        initConfig();
     }
     else if (request.action === 'generatePDF') {
         const pdf = exportPDF();
-        sendResponse({ pdf });
-    } else if (request.action === 'showNotificationImage') {
+        downloadPDF(pdf, getUserSessionTitle());
+        initConfig();
+    }
+    else if (request.action === 'showNotificationImage') {
         // 创建消息框
         const notificationDiv = document.createElement('div');
         notificationDiv.id = 'notification';
@@ -506,5 +535,231 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         setTimeout(() => {
             notificationDiv.remove();
         }, 2000);
+    }
+    else if (request.action === 'generateBatch') {
+        const messages = getOrderedMessages();
+        let currentPage = 0;
+        const messagesPerPage = 10;
+        let selectedMessages = [];
+
+        // 创建模态框
+        const modal = document.createElement('div');
+        modal.id = 'messageModal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+        modal.style.padding = '20px';
+        modal.style.zIndex = '1001';
+        modal.style.overflowY = 'auto';
+
+        // 创建模态框内容
+        const modalContent = document.createElement('div');
+        modalContent.style.maxHeight = 'calc(100% - 100px)';
+        modalContent.style.overflowY = 'auto';
+
+        function renderMessages(page) {
+            modalContent.innerHTML = '';
+            const start = page * messagesPerPage;
+            const end = start + messagesPerPage;
+            const pageMessages = messages.slice(start, end);
+
+            const table = document.createElement('table');
+            table.style.width = '98%';
+            table.style.borderCollapse = 'collapse';
+
+            pageMessages.forEach((message, index) => {
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid #ddd';
+
+                const idCell = document.createElement('td');
+                idCell.style.padding = '8px';
+                idCell.style.width = '25px';
+                idCell.textContent = start + index + 1;
+
+                const checkboxCell = document.createElement('td');
+                checkboxCell.style.padding = '8px';
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `message_${start + index}`;
+                checkbox.value = message;
+                checkbox.checked = selectedMessages.includes(message);
+                checkbox.addEventListener('change', (event) => {
+                    if (event.target.checked) {
+                        selectedMessages.push(message);
+                    } else {
+                        selectedMessages = selectedMessages.filter(m => m !== message);
+                    }
+                });
+                checkboxCell.appendChild(checkbox);
+
+                const messageCell = document.createElement('td');
+                messageCell.style.padding = '8px';
+                messageCell.style.color = 'black';
+                const label = document.createElement('label');
+                label.htmlFor = `message_${start + index}`;
+                label.textContent = message.length > 150 ? message.substring(0, 150) + '...' : message;
+
+                const toggleButton = document.createElement('button');
+                toggleButton.textContent = '展开';
+                toggleButton.style.marginLeft = '10px';
+                toggleButton.style.cursor = 'pointer';
+                toggleButton.style.background = 'none';
+                toggleButton.style.border = 'none';
+                toggleButton.style.color = '#4D6BFE';
+                toggleButton.style.textDecoration = 'underline';
+                toggleButton.addEventListener('click', () => {
+                    if (toggleButton.textContent === '展开') {
+                        label.textContent = message;
+                        toggleButton.textContent = '收起';
+                    } else {
+                        label.textContent = message.length > 150 ? message.substring(0, 150) + '...' : message;
+                        toggleButton.textContent = '展开';
+                    }
+                });
+
+                messageCell.appendChild(label);
+                messageCell.appendChild(toggleButton);
+
+                row.appendChild(idCell);
+                row.appendChild(checkboxCell);
+                row.appendChild(messageCell);
+                table.appendChild(row);
+            });
+
+            modalContent.appendChild(table);
+        }
+
+        // 按钮样式
+        const buttonStyle = {
+            marginTop: '10px',
+            marginRight: '10px',
+            padding: '10px 20px',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer'
+        };
+
+        // 创建分页按钮
+        const paginationDiv = document.createElement('div');
+        paginationDiv.style.textAlign = 'center';
+        paginationDiv.style.marginTop = '20px';
+
+        const prevButton = document.createElement('button');
+        prevButton.textContent = '上一页';
+        Object.assign(prevButton.style, buttonStyle, { backgroundColor: '#4D6BFE' });
+        prevButton.disabled = currentPage === 0;
+
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                renderMessages(currentPage);
+                nextButton.disabled = false;
+                if (currentPage === 0) prevButton.disabled = true;
+            }
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.textContent = '下一页';
+        Object.assign(nextButton.style, buttonStyle, { backgroundColor: '#4D6BFE' });
+        nextButton.disabled = (currentPage + 1) * messagesPerPage >= messages.length;
+
+        nextButton.addEventListener('click', () => {
+            if ((currentPage + 1) * messagesPerPage < messages.length) {
+                currentPage++;
+                renderMessages(currentPage);
+                prevButton.disabled = false;
+                if ((currentPage + 1) * messagesPerPage >= messages.length) nextButton.disabled = true;
+            }
+        });
+
+        paginationDiv.appendChild(prevButton);
+        paginationDiv.appendChild(nextButton);
+
+        // 创建全选按钮
+        const selectAllButton = document.createElement('button');
+        selectAllButton.textContent = '全选';
+        Object.assign(selectAllButton.style, buttonStyle, { backgroundColor: '#2196F3' });
+
+        selectAllButton.addEventListener('click', () => {
+            const checkboxes = modalContent.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+                const message = checkbox.value;
+                if (!selectedMessages.includes(message)) {
+                    selectedMessages.push(message);
+                }
+            });
+        });
+
+        // 创建反选按钮
+        const deselectAllButton = document.createElement('button');
+        deselectAllButton.textContent = '反选';
+        Object.assign(deselectAllButton.style, buttonStyle, { backgroundColor: '#FF9800' });
+
+        deselectAllButton.addEventListener('click', () => {
+            const checkboxes = modalContent.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !checkbox.checked;
+                const message = checkbox.value;
+                if (checkbox.checked) {
+                    if (!selectedMessages.includes(message)) {
+                        selectedMessages.push(message);
+                    }
+                } else {
+                    selectedMessages = selectedMessages.filter(m => m !== message);
+                }
+            });
+        });
+
+        // 创建关闭按钮
+        const closeButton = document.createElement('button');
+        closeButton.textContent = '关闭';
+        Object.assign(closeButton.style, buttonStyle, { backgroundColor: '#f44336' });
+
+        closeButton.addEventListener('click', () => {
+            modal.remove();
+        });
+
+        // 创建生成按钮
+        const generateButton = document.createElement('button');
+        generateButton.textContent = '导出Markdown';
+        Object.assign(generateButton.style, buttonStyle, { backgroundColor: '#4CAF50' });
+        generateButton.addEventListener('click', () => {
+            const markdownContent = generateMdContent(selectedMessages);
+            if (!markdownContent) {
+                alert("请选择要导出的消息！");
+                return;
+            }
+            // 下载选中的消息
+            downloadMarkdown(markdownContent, getUserSessionTitle());
+
+            // 关闭模态框
+            modal.remove();
+        });
+
+        modal.appendChild(modalContent);
+        modal.appendChild(paginationDiv);
+        modal.appendChild(generateButton);
+        modal.appendChild(selectAllButton);
+        modal.appendChild(deselectAllButton);
+        modal.appendChild(closeButton);
+
+        // 监听esc按键事件
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                modal.remove();
+            }
+        });
+        if (!document.getElementById('messageModal')) {
+            document.body.appendChild(modal);
+        }
+
+        renderMessages(currentPage);
+
+        initConfig();
     }
 });

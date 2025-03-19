@@ -1,7 +1,5 @@
 // 获取第一个开关元素（导出思维链）
-const exportSwitch = document.getElementById('exportChainOfThought');
-// 监听 switch 状态变化
-exportSwitch.addEventListener('change', (event) => {
+document.getElementById('exportChainOfThought').addEventListener('change', (event) => {
     const isChecked = event.target.checked;
 
     // 发送消息给 content.js
@@ -15,9 +13,7 @@ exportSwitch.addEventListener('change', (event) => {
 });
 
 // 获取第二个开关元素（屏蔽消息繁忙）
-const busySwitch = document.getElementById('blockBusyMessages');
-
-exportSwitch.addEventListener('change', (event) => {
+document.getElementById('blockBusyMessages').addEventListener('change', (event) => {
     const isChecked = event.target.checked;
 
     // 发送消息给 content.js
@@ -30,51 +26,31 @@ exportSwitch.addEventListener('change', (event) => {
     });
 });
 
+// 批量导出Markdown
+document.getElementById('exportBatch').addEventListener('click', () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "generateBatch" });
+    });
+});
 
-
-// 导出Markdown的按钮
+// 导出Markdown
 document.getElementById('exportAsMarkdown').addEventListener('click', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        // 向内容脚本发送消息
-        chrome.tabs.sendMessage(tabs[0].id, { action: "generateMarkdown" }, (response) => {
-            // 接收从 content.js 返回的 Markdown 内容
-            const markdown = response.markdown;
-            const title = response.title;
-
-            // 创建一个 Blob 对象并下载
-            const blob = new Blob([markdown], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = title + '.md';
-            a.click();
-        });
+        chrome.tabs.sendMessage(tabs[0].id, { action: "generateMarkdown" });
     });
 });
 
 // 导出PDF的按钮
 document.getElementById('exportAsPDF').addEventListener('click', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        // 向内容脚本发送消息
-        chrome.tabs.sendMessage(tabs[0].id, { action: "generatePDF" }, (response) => {
-            // 接收从 content.js 返回的 PDF 内容
-            const pdf = response.pdf;
-
-            // 创建一个新窗口并打印 PDF
-            const printWindow = window.open("", "_blank");
-            printWindow.document.write(pdf);
-            printWindow.document.close();
-            setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
-       });
+        chrome.tabs.sendMessage(tabs[0].id, { action: "generatePDF" });
     });
 });
 
 // 导出Image的按钮
 document.getElementById('exportAsImage').addEventListener('click', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        // 向内容脚本发送消息
         chrome.tabs.sendMessage(tabs[0].id, { action: 'showNotificationImage' });
-        console.log('exportAsImage');
     });
 });
 

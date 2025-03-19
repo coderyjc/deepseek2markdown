@@ -50,9 +50,32 @@ button:hover {
     margin-bottom: 20px;
 }
 
+.message-box {
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.switch-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.switch-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .switch-option {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* 使label位于父元素右对齐 */
+    gap: 10px;
+    width: 100%; /* 确保子元素可以在父元素内两端对齐 */
 }
 
 .switch-option span {

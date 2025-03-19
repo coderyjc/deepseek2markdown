@@ -18,11 +18,7 @@ Plugin interface
 <img src="./doc/popup.png" width="300"/>
 </div>
 
->Note: After clicking the "Export to PDF" button, an HTML page will pop up. You can use the web page print function to save it as a PDF file.
->
 >If the code blocks do not display correctly when exporting images, try exporting again.
->
->If you have a better method, you are welcome to submit a PR. Thank you.
 
 Original conversation / Exported Markdown text (typora theme is bluetex):
 
@@ -87,7 +83,10 @@ The installation method is to unzip the crx file and follow Method 1.
 - [ ] Support exporting to PDF
     - [x] Titles, thought chains, text styles (bold, italic, strikethrough), lists, tables, links and images, code, quotes, dividers, special symbols
     - [ ] Code block style optimization, support for formula export, support for highlighted text
-- [ ] Support exporting specific messages from a conversation (custom selection of paragraphs, export only questions or answers)
+
+v0.3
+
+- [x] Support exporting specific messages from a conversation (custom selection of paragraphs, export only questions or answers)
 
 v0.2
 

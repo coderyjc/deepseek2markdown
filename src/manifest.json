@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "DeepSeek2Markdown",
-    "version": "0.2.1",
-    "description": "Export DeepSeek Dialogs to Markdown",
+    "version": "0.3.0",
+    "description": "Export DeepSeek Dialogs to Markdown, PDF, Image, and more",
     "permissions": [
       "activeTab",
       "scripting"
