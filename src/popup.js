@@ -84,6 +84,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 // 语言配置
 const translations = {
     zh: {
+        summary: "🔨展开配置信息",
         exportChainOfThought: "导出思维链",
         blockBusyMessages: "导出消息繁忙",
         exportBatch: "📦批量导出",
@@ -93,6 +94,7 @@ const translations = {
         languageToggle: "中文|EN"
     },
     en: {
+        summary: "🔨Expand Configuration Information",
         exportChainOfThought: "Export Chain of Thought",
         blockBusyMessages: "Export Busy Messages",
         exportBatch: "📦Batch Export",
@@ -110,6 +112,7 @@ let currentLang = 'zh';
 function updateLanguage(lang) {
     currentLang = lang;
     // 更新所有文本内容
+    document.querySelector('summary').textContent = translations[lang].summary;
     document.querySelector('.switch-option:nth-child(1) span').textContent = translations[lang].exportChainOfThought;
     document.querySelector('.switch-option:nth-child(2) span').textContent = translations[lang].blockBusyMessages;
     document.getElementById('exportBatch').textContent = translations[lang].exportBatch;

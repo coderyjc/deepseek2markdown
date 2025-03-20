@@ -64,16 +64,15 @@ button:hover {
     flex-direction: column;
     gap: 10px;
     width: 100%;
+    padding-top: 10px;
 }
 
 .switch-option {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* 使label位于父元素右对齐 */
     gap: 10px;
     width: 100%;
-    /* 确保子元素可以在父元素内两端对齐 */
 }
 
 .switch-option span {

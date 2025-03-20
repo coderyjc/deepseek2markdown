@@ -12,22 +12,25 @@
         <h1>DeepSeek2Markdown</h1>
     </div>
     <div class="switch-container">
-        <div class="switch-box">
-            <div class="switch-option">
-                <span>导出思维链</span>
-                <label class="switch">
-                    <input type="checkbox" id="exportChainOfThought">
-                    <div class="slider round"></div>
-                </label>
+        <details style="cursor: pointer;">
+            <summary>🔨展开配置信息</summary>
+            <div class="switch-box">
+                <div class="switch-option">
+                    <span>导出思维链</span>
+                    <label class="switch">
+                        <input type="checkbox" id="exportChainOfThought">
+                        <div class="slider round"></div>
+                    </label>
+                </div>
+                <div class="switch-option">
+                    <span>导出消息繁忙</span>
+                    <label class="switch">
+                        <input type="checkbox" id="blockBusyMessages">
+                        <div class="slider round"></div>
+                    </label>
+                </div>
             </div>
-            <div class="switch-option">
-                <span>导出消息繁忙</span>
-                <label class="switch">
-                    <input type="checkbox" id="blockBusyMessages">
-                    <div class="slider round"></div>
-                </label>
-            </div>
-        </div>
+        </details>
     </div>
     <button id="exportBatch">📦批量导出</button>
     <button id="exportAsMarkdown">📄导出为Markdown</button>
@@ -35,7 +38,7 @@
     <button id="exportAsImage">🏞️导出为图像</button>
     <div class="footer">
         <button id="languageToggle">中文|EN</button>
-        <span>v0.3.1</span>
+        <span>v0.3.2</span>
     </div>
     <script src="popup.js"></script>
 </body>
