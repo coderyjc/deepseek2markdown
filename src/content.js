@@ -1,19 +1,18 @@
-
 // =====================
 // 配置
 // =====================
 const config = {
     mainPageSelector: '.cb86951c', // 主页面
     chatContainerSelector: '.dad65929',  // 聊天框容器
-    
-    userClassPrefix: 'fa81',             // 用户消息 class 前缀
-    
-    aiClassPrefix: 'f9bf7997',           // AI消息相关 class 前缀
 
-    aiChainOfThought: '.edb250b1',        // AI的思维链, 包含"已深度思考xxx秒"和"思考过程"
-    searchHintSelector: '.a6d716f5.db5991dd', // 搜索/思考时间, "已深度思考xxx秒"
+    userClassPrefix: '_9663006',             // 用户消息 class 前缀
+
+    aiClassPrefix: '_4f9bf79',           // AI消息相关 class 前缀
+
+    aiChainOfThought: '._48edb25',        // AI的思维链, 包含"已深度思考xxx秒"和"思考过程"
+    searchHintSelector: '._58a6d71._19db599', // 搜索/思考时间, "已深度思考xxx秒"
     thinkingChainSelector: '.e1675d8b',  // 思考链, "思考过程"
-    
+
     userSessionTitleSelector: '.d8ed659a',    // 用户会话标题
     finalAnswerSelector: 'div.ds-markdown.ds-markdown--block', // 回答的内容
     isExportChainOfThought: false,        // 是否导出思考链
@@ -73,9 +72,8 @@ function downloadMarkdown(markdown, title) {
 }
 
 // 下载PDF内容
-function downloadPDF(pdf, title) {
+function downloadPDF(pdf) {
     const printWindow = window.open("", "_blank");
-    printWindow.document.title = title;
     printWindow.document.write(pdf);
     printWindow.document.close();
     setTimeout(() => { printWindow.print(); }, 500);
@@ -313,7 +311,7 @@ function getFilteredContainer() {
         if (isAIMessage(node)) {
             const thinkingChainNode = node.querySelector(`${config.aiChainOfThought}`);
 
-            if (!config.isExportChainOfThought && thinkingChainNode && node.contains(thinkingChainNode)){
+            if (!config.isExportChainOfThought && thinkingChainNode && node.contains(thinkingChainNode)) {
                 node.removeChild(thinkingChainNode);
             }
         }
@@ -401,7 +399,7 @@ function exportPDF() {
     const printContent = `
             <html>
                 <head>
-                    <title>Export AS PDF</title>
+                    <title>${getUserSessionTitle()}</title>
                     <style>
                     body {
                         font: 12px 'Arial', sans-serif;
@@ -749,7 +747,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         modal.appendChild(closeButton);
 
         // 监听esc按键事件
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
                 modal.remove();
             }
