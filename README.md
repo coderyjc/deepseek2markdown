@@ -8,6 +8,8 @@
 
 导出DeepSeek的对话到Markdown文件
 
+[Chrome应用商店](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
+
 > 如果点击按钮没反应，请直接刷新页面后进行尝试。
 
 ## 特性
@@ -40,7 +42,13 @@
 
 ## 使用方法
 
-### 方法一：加载已解压的文件
+### 方法一：直接从Chrome商店下载
+
+直接从[Chrome商店](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)下载
+
+![add-to-chrome](./doc/add-to-chrome.png)
+
+### 方法二：加载已解压的文件
 
 1. 打开Chrome浏览器的加载扩展程序页面 [chrome://extensions/](chrome://extensions/)
 
@@ -71,12 +79,6 @@
 <div align=center>
 <img src="./doc/popup.png" width="300" />
 </div>
-
-### 方法二：安装crx文件
-
-应用暂未上架chrome extension store，建议使用方法一。
-
-安装方法为解压crx之后，按照方法一执行。
 
 ## 待办事项
 

@@ -8,6 +8,8 @@
 
 Export DeepSeek conversations to Markdown files
 
+[Chrome Web Store](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
+
 > If the button does not respond, please refresh the page and try again.
 
 ## Features
@@ -40,7 +42,13 @@ Original conversation / Exported image
 
 ## Usage
 
-### Method 1: Load unpacked files
+### Method 1: Download directly from the [Chrome Store](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
+
+[link](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
+
+![add-to-chrome](./doc/add-to-chrome.png)
+
+### Method 2: Load unpacked files
 
 1. Open the Chrome browser's extension loading page chrome://extensions/
 
@@ -71,12 +79,6 @@ Original conversation / Exported image
 <div align=center>
 <img src="./doc/popup.png" width="300" />
 </div>
-
-### Method 2: Install crx file
-
-The application is not yet available on the Chrome Extension Store. It is recommended to use Method 1.
-
-The installation method is to unzip the crx file and follow Method 1.
 
 ## To-Do List
 
