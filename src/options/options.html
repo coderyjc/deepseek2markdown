@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title data-i18n="pageTitle">DeepSeek Copilot - 设置</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="page">
+        <header class="page-header">
+            <h1 data-i18n="header">⚙️ 设置</h1>
+            <p class="muted" data-i18n="subtitle">本地优先 · API Key 加密存储 · 数据不离开浏览器</p>
+        </header>
+
+        <section class="card onboarding" id="onboarding" hidden>
+            <h2 data-i18n="onboardTitle">👋 首次使用</h2>
+            <ol>
+                <li data-i18n-html="onboardStep1">在 <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek 开放平台</a> 申请 API Key</li>
+                <li data-i18n="onboardStep2">把 Key 粘贴到下方「主 Key」输入框</li>
+                <li data-i18n="onboardStep3">点击「测试连接」确认可用 → 保存</li>
+            </ol>
+        </section>
+
+        <section class="card">
+            <h2 data-i18n="generalTitle">🌐 通用</h2>
+            <div class="row">
+                <label data-i18n="languageLabel">界面语言：</label>
+                <select id="language-select">
+                    <option value="zh">中文</option>
+                    <option value="en">English</option>
+                </select>
+                <span class="muted" data-i18n="languageHint">切换后会同步应用到弹窗、知识库和所有界面。</span>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 data-i18n="keyTitle">🔑 API Key（BYOK）</h2>
+            <p class="muted" data-i18n="keySubtitle">两个 Key 槽位，可作主备切换或多账号隔离。</p>
+
+            <div class="key-row">
+                <label data-i18n="keyPrimary">主 Key</label>
+                <div class="key-input">
+                    <input type="password" id="primary-input" placeholder="sk-...">
+                    <button class="btn-icon" id="primary-toggle" data-i18n-title="toggleVisibility" title="显示/隐藏">👁</button>
+                </div>
+                <button class="btn" id="primary-test" data-i18n="btnTest">测试</button>
+                <button class="btn btn-primary" id="primary-save" data-i18n="btnSave">保存</button>
+                <button class="btn btn-danger" id="primary-clear" data-i18n="btnClear">清除</button>
+                <span class="status" id="primary-status"></span>
+            </div>
+
+            <div class="key-row">
+                <label data-i18n="keyBackup">备用 Key</label>
+                <div class="key-input">
+                    <input type="password" id="backup-input" data-i18n-placeholder="backupPlaceholder" placeholder="sk-...（可选）">
+                    <button class="btn-icon" id="backup-toggle" data-i18n-title="toggleVisibility" title="显示/隐藏">👁</button>
+                </div>
+                <button class="btn" id="backup-test" data-i18n="btnTest">测试</button>
+                <button class="btn btn-primary" id="backup-save" data-i18n="btnSave">保存</button>
+                <button class="btn btn-danger" id="backup-clear" data-i18n="btnClear">清除</button>
+                <span class="status" id="backup-status"></span>
+            </div>
+
+            <div class="row">
+                <label data-i18n="activeLabel">当前活跃：</label>
+                <label class="radio"><input type="radio" name="active-slot" value="primary" id="active-primary"> <span data-i18n="keyPrimary">主 Key</span></label>
+                <label class="radio"><input type="radio" name="active-slot" value="backup" id="active-backup"> <span data-i18n="keyBackup">备用 Key</span></label>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 data-i18n="modelTitle">🤖 模型与行为</h2>
+            <div class="row">
+                <label data-i18n="modelLabel">模型：</label>
+                <select id="model-select">
+                    <option value="deepseek-chat" data-i18n="modelChat">deepseek-chat（V4 通用）</option>
+                    <option value="deepseek-reasoner" data-i18n="modelReasoner">deepseek-reasoner（R1 推理）</option>
+                </select>
+            </div>
+            <div class="row">
+                <label class="checkbox">
+                    <input type="checkbox" id="auto-summarize">
+                    <span data-i18n="autoSummarize">入库时自动生成 AI 摘要 + 标签</span>
+                </label>
+            </div>
+            <div class="row">
+                <label class="checkbox">
+                    <input type="checkbox" id="auto-save">
+                    <span data-i18n="autoSave">自动保存对话到知识库</span>
+                </label>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 data-i18n="usageTitle">📊 用量统计</h2>
+            <div class="usage">
+                <div class="usage-item"><span class="usage-num" id="u-calls">0</span><span class="usage-label" data-i18n="usageCalls">调用次数</span></div>
+                <div class="usage-item"><span class="usage-num" id="u-prompt">0</span><span class="usage-label" data-i18n="usagePrompt">输入 tokens</span></div>
+                <div class="usage-item"><span class="usage-num" id="u-completion">0</span><span class="usage-label" data-i18n="usageCompletion">输出 tokens</span></div>
+                <div class="usage-item"><span class="usage-num" id="u-cost">$0.00</span><span class="usage-label" data-i18n="usageCost">估算成本</span></div>
+            </div>
+            <div class="row">
+                <span class="muted" id="u-since"></span>
+                <button class="btn" id="reset-usage" data-i18n="btnReset" style="margin-left:auto">重置</button>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 data-i18n="exportTitle">📦 导出</h2>
+            <p class="muted" data-i18n="exportSubtitle">将数据打包为 ZIP 文件下载到本地。</p>
+            <div class="export-buttons">
+                <button class="btn btn-export" id="export-kb" data-i18n="exportKB">📦 导出知识库</button>
+                <button class="btn btn-export" id="export-cards" data-i18n="exportCards">📦 导出知识卡片</button>
+                <button class="btn btn-export" id="export-workflows" data-i18n="exportWorkflows">📦 导出工作流</button>
+            </div>
+            <span class="status" id="export-status"></span>
+        </section>
+
+        <footer class="muted page-footer">
+            <a href="https://github.com/coderyjc/deepseek2markdown" target="_blank">GitHub</a>
+            ·
+            <span>v0.4.0</span>
+        </footer>
+    </div>
+
+    <script src="../db/schema.js"></script>
+    <script src="../db/repo.js"></script>
+    <script src="../security/crypto.js"></script>
+    <script src="../ai/settings.js"></script>
+    <script src="../ai/errors.js"></script>
+    <script src="../lib/zipwriter.js"></script>
+    <script src="options.js"></script>
+</body>
+</html>

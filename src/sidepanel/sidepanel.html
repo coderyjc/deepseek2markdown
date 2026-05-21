@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>DeepSeek2Markdown - 知识库</title>
+    <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+    <div class="sp-root">
+        <nav class="sp-tab-bar">
+            <button class="sp-tab active" data-tab="kb" id="sp-tab-kb">📚 知识库</button>
+            <button class="sp-tab" data-tab="recall" id="sp-tab-recall">🧠 AI回忆</button>
+            <button class="sp-tab" data-tab="distill" id="sp-tab-distill">📝 知识沉淀</button>
+        </nav>
+        <div class="sp-view" id="view-kb">
+            <aside class="sp-sidebar">
+                <header class="sp-sidebar-header">
+                    <h2 id="sp-title">📚 知识库</h2>
+                    <span class="sp-count" id="sp-count">0</span>
+                </header>
+                <div class="sp-toolbar">
+                    <button class="sp-tb-btn" id="sp-tb-save" title="将当前对话保存到知识库">
+                        <span class="ico">⭐</span><span class="lbl" id="sp-tb-save-label">保存当前对话</span>
+                    </button>
+                </div>
+                <div class="sp-toast" id="sp-toast" hidden></div>
+                <div class="sp-search">
+                    <input type="search" id="sp-search-input" placeholder="搜索对话..." autocomplete="off">
+                    <button class="sp-search-clear" id="sp-search-clear" hidden title="清除">×</button>
+                </div>
+                <div class="sp-list" id="sp-list"></div>
+                <div class="sp-noresult" id="sp-noresult" hidden>
+                    <div class="sp-empty-icon">🔍</div>
+                    <p id="sp-noresult-text">没有匹配的对话</p>
+                </div>
+                <div class="sp-empty" id="sp-empty" hidden>
+                    <div class="sp-empty-icon">📭</div>
+                    <h3 id="sp-empty-title">还没有任何对话</h3>
+                    <p id="sp-empty-tip">在 DeepSeek 对话页打开本插件，点击「将当前对话加入知识库」即可保存。</p>
+                </div>
+            </aside>
+            <main class="sp-detail" id="sp-detail">
+                <div class="sp-placeholder" id="sp-placeholder">
+                    <div class="sp-placeholder-icon">👈</div>
+                    <p id="sp-placeholder-text">从左侧选择一个对话查看</p>
+                </div>
+                <article class="sp-article" id="sp-article" hidden>
+                    <header class="sp-article-header">
+                        <h1 id="sp-article-title"></h1>
+                        <div class="sp-article-meta">
+                            <span id="sp-article-meta-saved"></span>
+                            <span id="sp-article-meta-count"></span>
+                            <a id="sp-article-link" href="#" target="_blank" hidden>↗ 原对话</a>
+                            <button class="sp-btn-secondary" id="sp-summarize" hidden>✨ 重新摘要</button>
+                            <button class="sp-btn-danger" id="sp-delete">🗑️ 删除</button>
+                        </div>
+                        <div class="sp-summary" id="sp-summary" hidden>
+                            <div class="sp-summary-header">
+                                <span class="sp-summary-icon">✨</span>
+                                <span class="sp-summary-status" id="sp-summary-status"></span>
+                            </div>
+                            <div class="sp-summary-body" id="sp-summary-body"></div>
+                            <div class="sp-summary-tags" id="sp-summary-tags"></div>
+                        </div>
+                    </header>
+                    <section class="sp-messages" id="sp-messages"></section>
+                </article>
+            </main>
+        </div>
+        <div class="sp-view" id="view-recall" hidden>
+            <div class="sp-recall-layout">
+                <div class="sp-recall-sidebar">
+                    <div class="sp-recall-sidebar-header">
+                        <span id="sp-recall-history-label">历史对话</span>
+                        <button id="sp-recall-new" title="新对话">＋</button>
+                    </div>
+                    <div class="sp-recall-list" id="sp-recall-list"></div>
+                </div>
+                <div class="sp-recall">
+                    <div class="sp-recall-messages" id="sp-recall-messages">
+                        <div class="sp-recall-welcome" id="sp-recall-welcome">
+                            <div class="sp-recall-welcome-icon">🧠</div>
+                            <h3 id="sp-recall-welcome-title">AI 回忆</h3>
+                            <p id="sp-recall-welcome-desc">用自然语言搜索你的知识库，我会帮你找到相关对话。</p>
+                        </div>
+                    </div>
+                    <div class="sp-recall-input-area">
+                        <div class="sp-recall-input-row">
+                            <textarea id="sp-recall-input" placeholder="输入你的问题..." rows="1"></textarea>
+                            <button id="sp-recall-send">▶</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sp-view" id="view-distill" hidden>
+            <aside class="sp-sidebar">
+                <div class="sp-distill-subtabs">
+                    <button class="sp-distill-subtab active" data-subtab="cards" id="sp-subtab-cards">知识卡片</button>
+                    <button class="sp-distill-subtab" data-subtab="workflows" id="sp-subtab-workflows">工作流</button>
+                </div>
+                <div id="sp-distill-cards-panel">
+                    <div class="sp-toolbar">
+                        <button class="sp-tb-btn" id="sp-tb-new-card" title="选择对话生成知识卡片">
+                            <span class="ico">📝</span><span class="lbl" id="sp-tb-new-card-label">新建知识卡片</span>
+                        </button>
+                    </div>
+                    <div class="sp-toast" id="sp-distill-toast" hidden></div>
+                    <div class="sp-list" id="sp-kc-list"></div>
+                    <div class="sp-empty" id="sp-kc-empty" hidden>
+                        <div class="sp-empty-icon">📝</div>
+                        <h3 id="sp-kc-empty-title">还没有知识卡片</h3>
+                        <p id="sp-kc-empty-tip">点击「新建知识卡片」选择对话，AI 会帮你生成结构化知识文章。</p>
+                    </div>
+                </div>
+                <div id="sp-distill-select-panel" hidden>
+                    <div class="sp-distill-select-header">
+                        <span id="sp-distill-select-title">选择对话</span>
+                        <button class="sp-distill-select-cancel" id="sp-distill-cancel">✕ 取消</button>
+                    </div>
+                    <div class="sp-search">
+                        <input type="search" id="sp-distill-search" placeholder="搜索对话..." autocomplete="off">
+                    </div>
+                    <div class="sp-list" id="sp-distill-select-list"></div>
+                    <div class="sp-distill-select-bar">
+                        <span id="sp-distill-select-count">已选 0 个</span>
+                        <button class="sp-distill-go-btn" id="sp-distill-go" disabled>
+                            <span id="sp-distill-go-label">开始沉淀</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="sp-distill-workflows-panel" hidden>
+                    <div class="sp-toolbar">
+                        <button class="sp-tb-btn" id="sp-tb-new-workflow" title="选择对话提取工作流">
+                            <span class="ico">⚙️</span><span class="lbl" id="sp-tb-new-workflow-label">新建工作流</span>
+                        </button>
+                    </div>
+                    <div class="sp-toast" id="sp-wf-toast" hidden></div>
+                    <div class="sp-list" id="sp-wf-list"></div>
+                    <div class="sp-empty" id="sp-wf-empty" hidden>
+                        <div class="sp-empty-icon">⚙️</div>
+                        <h3 id="sp-wf-empty-title">还没有工作流</h3>
+                        <p id="sp-wf-empty-tip">点击「新建工作流」选择对话，AI 会帮你提取可复用的工作流程。</p>
+                    </div>
+                </div>
+            </aside>
+            <main class="sp-detail" id="sp-kc-detail">
+                <div class="sp-placeholder" id="sp-kc-placeholder">
+                    <div class="sp-placeholder-icon">👈</div>
+                    <p id="sp-kc-placeholder-text">从左侧选择一个知识卡片查看</p>
+                </div>
+                <article class="sp-article" id="sp-kc-article" hidden>
+                    <header class="sp-article-header">
+                        <h1 id="sp-kc-article-title"></h1>
+                        <div class="sp-article-meta">
+                            <span id="sp-kc-article-meta"></span>
+                            <button class="sp-btn-secondary" id="sp-kc-edit">✏️ 编辑</button>
+                            <button class="sp-btn-secondary" id="sp-kc-save" hidden>💾 保存</button>
+                            <button class="sp-btn-secondary" id="sp-kc-cancel-edit" hidden>取消</button>
+                            <button class="sp-btn-danger" id="sp-kc-delete">🗑️ 删除</button>
+                        </div>
+                        <div class="sp-kc-summary" id="sp-kc-summary">
+                            <div class="sp-summary-header">
+                                <span class="sp-summary-icon">📋</span>
+                                <span id="sp-kc-summary-text"></span>
+                            </div>
+                        </div>
+                        <div class="sp-kc-tags" id="sp-kc-tags"></div>
+                        <div class="sp-kc-sources" id="sp-kc-sources"></div>
+                    </header>
+                    <div id="sp-kc-body"></div>
+                    <div id="sp-kc-edit-area" hidden>
+                        <input type="text" id="sp-kc-edit-title" class="sp-kc-edit-title-input">
+                        <textarea id="sp-kc-edit-article" class="sp-kc-edit-article-input"></textarea>
+                    </div>
+                </article>
+            </main>
+        </div>
+    </div>
+    <script src="../lib/marked.min.js"></script>
+    <script src="../lib/zipwriter.js"></script>
+    <script src="../db/schema.js"></script>
+    <script src="../db/repo.js"></script>
+    <script src="../security/crypto.js"></script>
+    <script src="../ai/settings.js"></script>
+    <script src="../ai/errors.js"></script>
+    <script src="sidepanel.js"></script>
+</body>
+</html>

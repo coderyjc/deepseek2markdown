@@ -1,46 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <head>
-    <title>DeepSeek Export</title>
+    <title>DeepSeek Copilot</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="head-container">
-        <img src="./icons/icon32.png" alt="icon">
-        <h1>DeepSeek2Markdown</h1>
+    <header class="app-header">
+        <img src="./icons/icon32.png" alt="logo" class="app-logo">
+        <h1 class="app-title">DeepSeek <span class="brand-accent">Copilot</span></h1>
+    </header>
+
+    <button class="action-btn kb-btn" id="openKB">
+        <span class="ico">📚</span><span class="lbl" data-i18n="openKB">知识库</span>
+    </button>
+
+    <button id="exportAsMarkdown" class="action-btn">
+        <span class="ico">📄</span><span class="lbl" data-i18n="exportAsMarkdown">导出为 Markdown</span>
+    </button>
+
+    <button id="exportBatch" class="action-btn">
+        <span class="ico">📦</span><span class="lbl" data-i18n="exportBatch">选择性导出</span>
+    </button>
+
+    <div class="action-row">
+        <button id="exportAsPDF" class="action-btn action-half">
+            <span class="ico">📕</span><span class="lbl" data-i18n="exportAsPDF">导出为 PDF</span>
+        </button>
+        <button id="exportAsImage" class="action-btn action-half">
+            <span class="ico">🖼️</span><span class="lbl" data-i18n="exportAsImage">导出为图像</span>
+        </button>
     </div>
-    <div class="switch-container">
-        <details style="cursor: pointer;">
-            <summary>🔨展开配置信息</summary>
-            <div class="switch-box">
-                <div class="switch-option">
-                    <span>导出思维链</span>
-                    <label class="switch">
-                        <input type="checkbox" id="exportChainOfThought">
-                        <div class="slider round"></div>
-                    </label>
-                </div>
-                <div class="switch-option">
-                    <span>导出消息繁忙</span>
-                    <label class="switch">
-                        <input type="checkbox" id="blockBusyMessages">
-                        <div class="slider round"></div>
-                    </label>
-                </div>
-            </div>
-        </details>
-    </div>
-    <button id="exportBatch">📦批量导出</button>
-    <button id="exportAsMarkdown">📄导出为Markdown</button>
-    <button id="exportAsPDF">📕导出为PDF</button>
-    <button id="exportAsImage">🏞️导出为图像</button>
-    <div class="footer">
+
+    <button id="openSettings" class="action-btn">
+        <span class="ico">⚙️</span><span class="lbl" data-i18n="openSettings">设置</span>
+    </button>
+
+    <div id="kbToast" class="kb-toast" hidden></div>
+
+    <footer class="footer">
         <button id="languageToggle">中文|EN</button>
         <a href="https://github.com/coderyjc/deepseek2markdown" target="_blank">Github</a>
-        <span>v0.3.2</span>
-    </div>
+        <span>v0.4.0</span>
+    </footer>
+
+    <script src="db/schema.js"></script>
+    <script src="db/repo.js"></script>
+    <script src="security/crypto.js"></script>
+    <script src="ai/settings.js"></script>
     <script src="popup.js"></script>
 </body>
 
