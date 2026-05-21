@@ -1,170 +1,194 @@
-h1 {
-    font-size: 17px;
-    margin-top: 15px;
-    text-align: center;
-    width: 100%;
+[hidden] {
+    display: none !important;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7fb;
-    width: 260px;
-    padding: 10px;
+* {
     box-sizing: border-box;
 }
 
-button {
-    font-size: 13px;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    color: #fff;
-    padding: 8px 24px;
-    background-color: #0072fc;
-    margin-bottom: 15px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
+body {
+    width: 280px;
+    margin: 0;
+    padding: 12px;
+    background-color: #f7f8fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: #1f2937;
 }
 
-button:hover {
-    background-color: #005bb5;
-}
-
-.head-container {
+.app-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 8px;
+    padding: 4px 2px 12px;
 }
 
-.switch-container {
-    border: 2px solid #ccc;
-    padding: 8px;
+.app-logo {
+    width: 24px;
+    height: 24px;
+}
+
+.app-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    letter-spacing: 0.2px;
+}
+
+.brand-accent {
+    background: linear-gradient(90deg, #2563eb 0%, #7c3aed 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-weight: 700;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: #ffffff;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.message-box {
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    color: #333;
-}
-
-.switch-box {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    padding-top: 10px;
-}
-
-.switch-option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    width: 100%;
-}
-
-.switch-option span {
     font-size: 13px;
-    margin-right: 10px;
-    color: #333;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 28px;
-}
-
-.switch input {
-    display: none;
-}
-
-.slider {
-    position: absolute;
+    font-weight: 500;
+    text-align: left;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    border-radius: 30px;
-    transition: background-color 0.3s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+    transition: background-color .15s, border-color .15s, box-shadow .15s, transform .05s;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    border-radius: 50%;
-    transition: transform 0.3s;
+.action-btn:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
 }
+
+.action-btn:active {
+    transform: translateY(1px);
+}
+
+.action-btn .ico {
+    font-size: 16px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.action-btn .lbl {
+    flex: 1;
+}
+
+.kb-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+    color: #fff;
+    border: none;
+    font-weight: 600;
+}
+
+.kb-btn:hover {
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a42a0 50%, #e084e8 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+    border: none;
+}
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.action-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.action-half {
+    flex: 1;
+    margin-bottom: 0;
+    justify-content: center;
+}
+
+.kb-toast {
+    margin: 4px 0 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: center;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.kb-toast.error {
+    background-color: #fdecea;
+    color: #c62828;
+    border-color: #f5c6cb;
+}
+
+.kb-toast.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-color: #c8e6c9;
+}
+
+.kb-toast-hint {
+    font-size: 11px;
+    opacity: .8;
+}
+
+.kb-toast-action {
+    background: none; border: none; color: inherit;
+    text-decoration: underline; cursor: pointer;
+    font-size: 11px; font-weight: 600; padding: 0;
+    margin-left: 2px;
+}
+.kb-toast-action:hover { opacity: .7; }
 
 .footer {
-    position: fixed;
-    bottom: -10px;
-    left: 0;
-    right: 0;
     display: flex;
-    padding: 0 10px;
-    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
-    align-items: baseline;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid #eef0f4;
 }
 
 .footer button {
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #2563eb;
     font-size: 12px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: #F4F7FB;
+    padding: 3px 10px;
+    border-radius: 6px;
     cursor: pointer;
-    width: 80px;
-    color: blue;
+    transition: background-color .15s, border-color .15s;
+}
+
+.footer button:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+.footer a {
+    font-size: 12px;
+    color: #6b7280;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: #2563eb;
 }
 
 .footer span {
     font-size: 12px;
-    color: #666;
-}
-
-input:checked+.slider {
-    background-color: #4caf50;
-}
-
-input:checked+.slider:before {
-    transform: translateX(20px);
-}
-
-#exportAsMarkdown,
-#exportAsPDF {
-    background-color: #28a745;
-}
-
-#exportAsMarkdown:hover,
-#exportAsPDF:hover {
-    background-color: #218838;
-}
-
-#exportAsPDF {
-    background-color: #dc3545;
-}
-
-#exportAsPDF:hover {
-    background-color: #a01c2a;
+    color: #9ca3af;
 }

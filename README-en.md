@@ -1,117 +1,94 @@
 <div align=center>
-<img src="./doc/pic.png" width="300" height="300" />
+<img src="./doc/banner.png" width="800" />
 </div>
 
 <div align=center>
 <a href="./README.md">简体中文</a> | English
 </div>
 
-Export DeepSeek conversations to Markdown files
+<div align=center>
 
-[Chrome Web Store](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jfolcdbejlennfldgbninbjglbahaejn)](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
 
-> If the button does not respond, please refresh the page and try again.
+</div>
+
+**DeepSeek Copilot** is a Chrome extension that turns your DeepSeek conversations into a **personal knowledge base**. Export conversations as Markdown / PDF / images, search with natural language, generate AI summaries, and distill knowledge into cards and workflows — all stored locally. Just bring your own API Key.
+
+---
 
 ## Features
 
-Plugin interface
+### Export Conversations
+
+Export DeepSeek conversations to **Markdown**, **PDF**, or **images** with one click. Supports selective batch export.
+
+### Knowledge Base
 
 <div align=center>
-<img src="./doc/popup.png" width="300"/>
+<img src="./doc/01.png" width="700" />
 </div>
 
->If the code blocks do not display correctly when exporting images, try exporting again.
+Save conversations to a local knowledge base. Browse, search, and get AI-generated summaries and tags. Auto-save is also supported.
 
-Original conversation / Exported Markdown text (typora theme is bluetex):
+### AI Recall
 
 <div align=center>
-<img src="./doc/example.png"/>
+<img src="./doc/02.png" width="700" />
 </div>
 
-Original conversation / Exported PDF
+Search your knowledge base using natural language. AI answers in streaming mode based on your saved conversations, supports multi-turn follow-ups, and cited conversations are clickable for quick navigation.
+
+### Knowledge Distillation
 
 <div align=center>
-<img src="./doc/example-pdf.png"/>
+<img src="./doc/03.png" width="700" />
 </div>
 
-Original conversation / Exported image
+Extract **Knowledge Cards** (structured articles) or **Workflows** (reusable procedures) from multiple conversations, turning scattered dialogues into organized knowledge.
+
+### Quick Actions
 
 <div align=center>
-<img src="./doc/example-image.png" width="400"/> 
+<img src="./doc/04.png" width="350" />
 </div>
 
-## Usage
+Use the Popup to quickly export the current conversation, open the knowledge base, or access settings.
 
-### Method 1: Download directly from the [Chrome Store](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
+---
 
-[link](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn)
+## Highlights
 
-![add-to-chrome](./doc/add-to-chrome.png)
+| Feature | Description |
+|---|---|
+| Local-first | All data stored in IndexedDB, nothing uploaded to any server |
+| BYOK | Bring Your Own DeepSeek API Key — zero cost, zero subscriptions |
+| Encrypted Keys | API keys stored with AES-GCM-256 encryption |
+| Auto-save | Conversations saved automatically as you browse |
+| Bilingual | Switch between Chinese and English UI |
+| Usage Dashboard | Track API calls, token usage, and estimated costs |
 
-### Method 2: Load unpacked files
+---
 
-1. Open the Chrome browser's extension loading page chrome://extensions/
+## Installation
 
-<div align=center>
-<img src="./doc/step1.png" width="400"/>
-</div>
+### Option 1: Chrome Web Store (Recommended)
 
-2. Load the unpacked extension. Assuming the downloaded directory is D:\code\github\deepseek2markdown, you should open D:\code\github\deepseek2markdown\src and click "Select Folder" to load the contents of the src folder.
+Install directly from the [Chrome Web Store](https://chromewebstore.google.com/detail/deepseek2markdown/jfolcdbejlennfldgbninbjglbahaejn).
 
-<div align=center>
-<img src="./doc/step2.png" width="400"/>
-</div>
+### Option 2: Load Unpacked Extension
 
-<div align=center>
-<img src="./doc/step3.png" width="400" /> 
-</div>
+1. Open Chrome and go to `chrome://extensions/`, enable **Developer mode**
+2. Click "Load unpacked" and select the `src` folder from this project
+3. Pin the extension in your toolbar
 
-3. Pin the plugin in the plugin bar
+> **Note**: If you already have DeepSeek open before loading the extension for the first time, refresh the page.
 
-**Note: If you have opened the DeepSeek webpage before using the plugin for the first time, you should refresh it first.**
+---
 
-<div align=center>
-<img src="./doc/step4.png" width="300" /> 
-</div>
+## Feedback & Contributions
 
-4. Click the button to extract the current conversation's markdown file. You can choose whether to export the thought chain.
-
-<div align=center>
-<img src="./doc/popup.png" width="300" />
-</div>
-
-## To-Do List
-
-- [ ] Support exporting to PDF
-    - [x] Titles, thought chains, text styles (bold, italic, strikethrough), lists, tables, links and images, code, quotes, dividers, special symbols
-    - [ ] Code block style optimization, support for formula export, support for highlighted text
-
-v0.3
-
-- [x] Support exporting specific messages from a conversation (custom selection of paragraphs, export only questions or answers)
-- [x] Popup supports switching between Chinese and English
-
-v0.2
-
-- [x] Support strict mode Markdown export
-- [x] Support filtering out server busy messages
-- [x] Added image export function
-
-v0.1
-
-- [x] Popup interface beautification
-- [x] Optimized markdown text export format
-- [x] Option to export thought chain
-- [x] Optimized code export style
-- [x] Support for exporting tables
-- [x] Support for exporting images
-- [x] Optimized export style for multi-level lists
-
-## Feedback and Contributions
-
-If you encounter any issues or have suggestions for improvement, please feel free to submit an Issue or PR.
+If you encounter issues or have suggestions, feel free to submit an [Issue](https://github.com/coderyjc/deepseek2markdown/issues) or PR.
 
 ## Acknowledgments
 
 [DeepSeek-Chat-Exporter](https://github.com/blueberrycongee/DeepSeek-Chat-Exporter)
-

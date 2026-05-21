@@ -1,15 +1,24 @@
 {
     "manifest_version": 3,
-    "name": "DeepSeek2Markdown",
-    "version": "0.3.2",
-    "description": "Export DeepSeek Dialogs to Markdown, PDF, Image, and more",
+    "name": "DeepSeek Copilot",
+    "version": "0.4.0",
+    "description": "DeepSeek 个人知识库 Copilot：一键导出对话为 Markdown/PDF/图片，本地知识库、AI 摘要、自然语言回忆、知识卡片与工作流沉淀。",
     "permissions": [
       "activeTab",
       "scripting",
-      "storage"
+      "storage",
+      "sidePanel"
+    ],
+    "host_permissions": [
+      "https://api.deepseek.com/*",
+      "https://www.google-analytics.com/*"
     ],
     "background": {
       "service_worker": "background.js"
+    },
+    "options_ui": {
+      "page": "options/options.html",
+      "open_in_tab": true
     },
     "action": {
       "default_popup": "popup.html",
@@ -22,6 +31,9 @@
         "128": "icons/icon128.png"
       }
     },
+    "side_panel": {
+      "default_path": "sidepanel/sidepanel.html"
+    },
     "icons": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
@@ -33,7 +45,7 @@
     "content_scripts": [
       {
         "matches": ["https://chat.deepseek.com/*"],
-        "js": ["lib/marked.min.js", "lib/html2canvas.min.js", "lib/canvas2image.js", "content.js"],
+        "js": ["lib/marked.min.js", "lib/html2canvas.min.js", "lib/canvas2image.js", "db/page_cache.js", "content.js"],
         "run_at": "document_end"
       }
     ]
